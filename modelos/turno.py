@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class Turno(Enum):
-    matutino = 1
-    vespertino = 2
-    noturno = 3
+    Matutino = 1
+    Vespertino = 2
+    Noturno = 3

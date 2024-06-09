@@ -3,14 +3,12 @@ from modelos.turno import Turno
 
 class Pessoa(ABC):
     @abstractmethod
-    def __init__(self, nome: str, numero_telefone: int, email: str, turno: Turno):
+    def __init__(self, nome: str, numero_telefone: int, email: str):
         if isinstance(nome, str):
             self.__nome = nome
-        if isinstance(numero_telefone, int):
-            self.__numero_telefone = numero_telefone
+        self.__numero_telefone = numero_telefone
         if isinstance(email, str):
             self.__email = email
-        self.__turno = turno
 
     @property
     def nome(self):

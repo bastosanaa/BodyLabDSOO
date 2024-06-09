@@ -5,8 +5,8 @@ from modelos.matricula import Matricula
 
 class Aluno(Pessoa):
     def __init__(self, nome: str, numero_telefone: int,
-                 email: str, turno: Turno, matricula: Matricula):
-        super().__init__(nome, numero_telefone, email, turno)
+                 email: str, matricula: Matricula):
+        super().__init__(nome, numero_telefone, email)
         if isinstance(matricula, Matricula):
             self.__matricula = matricula
         self.__ficha = ''
