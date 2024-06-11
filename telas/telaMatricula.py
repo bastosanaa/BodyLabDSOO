@@ -1,58 +1,138 @@
 from telas.telaAbstrata import TelaAbstrata
+import PySimpleGUI as sg
 
 class TelaMatricula(TelaAbstrata):
-    def tela_opcoes(self):
-        print("----------- Matrículas ------------")
-        print("1 - Realizar Matrícula")
-        print("2 - Cancelar Matrícula")
-        print("3 - Listar Matrículas")
-        print("4 - Vizualizar Matricula Específica")
-        print("5 - Alterar Plano")
-        print("6 - Alterar Turno")
-        print("7 - Plano mais procurado")
-        print("8 - Turno mais procurado")
-        print("0 - Voltar ao menu inicial")
-        opcao = int(input("Insira a opção escolhida: "))
-        return opcao
-
-    def pega_dados_matricula(self, turnos, planos):
-        print("----------- Realizar matrícula ------------")
-        aluno = input("Insira o nome do aluno: ")
-        turno = self.seleciona_turno(turnos)
-        plano = self.seleciona_plano(planos)
-        return {"aluno": aluno, "turno": turno, "plano": plano}
+    def __init__(self):
+        self.__window = None
+        self.init_opcoes()
+        self.__turnos = ['Matutino', 'Vespertino', 'Noturno']
+        self.__planos = ['Silver', 'Gold', 'Diamond']
     
-    def seleciona_plano(self, planos):
-        print("Selecione o plano:")
-        for i, plano in enumerate(planos):
-            print(f"{i} - {plano}")
-        plano_selecionado = int(input("Insira o número do plano escolhido: "))
-        return planos[plano_selecionado]
+    def tela_opcoes(self):
+        self.init_opcoes()
+        button, values = self.open()
+        if values['1']:
+            opcao = 1
+        if values['2']:
+            opcao = 2
+        if values['3']:
+            opcao = 3  
+        if values['4']:
+            opcao = 4
+        if values['5']:
+            opcao = 5
+        if values['6']:
+            opcao = 6
+        if values['7']:
+            opcao = 7
+        if values['8']:
+            opcao = 8
+        if values['0'] or button in(None, "Cancelar"):
+            opcao = 0
+        self.close()
+        return opcao
+    
+    def init_opcoes(self):
+        sg.ChangeLookAndFeel('DarkPurple1')
+        layout = [
+            [sg.Text("Matriculas", font=('Fira Code', 25))],
+            [sg.Radio('Realizar Matrícula', "RD1", key='1')],
+            [sg.Radio('Cancelar Matrícula', "RD1", key='2')],
+            [sg.Radio('Listar Matrículas', "RD1", key='3')],
+            [sg.Radio('Vizualizar Matricula Específica', "RD1", key='4')],
+            [sg.Radio('Alterar Plano', "RD1", key='5')],
+            [sg.Radio('Alterar Turno', "RD1", key='6')],
+            [sg.Radio('Plano mais procurado', "RD1", key='7')],
+            [sg.Radio('Turno mais procurado', "RD1", key='8')],
+            [sg.Radio('Retornar', "RD1", key='0')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window('Sistma BodyLab').Layout(layout)
+    
+    def pega_dados_matricula(self):
+        sg.ChangeLookAndFeel('DarkPurple1')
+        layout = [
+            [sg.Text("----------- Realizar Matricula ------------", font=('Fira Code', 25))],
+            [sg.Text('Insira o nome do aluno: ', size=(15,1)), sg.InputText('', key='aluno')],
+            [sg.Text('Numero de Telefone: ', size=(15,1)), sg.InputText('', key='numero_telefone')],
+            [sg.Text('E-mail: ', size=(15,1)), sg.InputText('', key='email')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window('Matricula').Layout(layout)
+    
+        button, values = self.open()
+        aluno = values['aluno']
+        numero_telefone = values['numero_telefone'] 
+        email = values['email']
 
-    def seleciona_turno(self, turnos):
-        print("Selecione o turno:")
-        for i, turno in enumerate(turnos):
-            print(f"{i} - {turno}")
-        turno_selecionado = int(input("Insira o número do turno escolhido: "))
-        return turnos[turno_selecionado]
+        self.close()
+        return {"aluno": aluno, "numero_telefone": numero_telefone, "email": email}
 
+    def pega_dados_matricula(self, turno, plano):
+        layout = [
+            [sg.Text("----------- Realizar matrícula ------------")],
+            [sg.Text('Insira o nome do aluno: '), sg.InputText('', key='aluno')],
+            [sg.Text('Selecione o turno:'), sg.Combo(self.__turnos, key='turno')],
+            [sg.Text('Selecione o plano:'), sg.Combo(self.__planos, key='plano')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        
+        self.__window = sg.Window('Matrícula').Layout(layout)
+        button, values = self.open()
+    
+        aluno = values['aluno']
+        turno = values['turno']
+        plano = values['plano']
+
+        self.close()
+        return {"aluno": aluno, "turno": turno, "plano": plano}
+
+        
     def seleciona_id_matricula(self):
-        id_matricula = int(input("Insira o id da matrícula: "))
-        return id_matricula
+        layout = [
+            [sg.Text('Insira o id da matrícula: '), sg.InputText('', key='id_matricula')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        
+        self.__window = sg.Window('Matrícula').Layout(layout)
+        button, values = self.open()
+    
+        id_matricula = int(values['id_matricula'])
+        
+        self.close()
+        return {'id_matricula': id_matricula}
 
-    def mostra_dados_matricula(self, matricula):
-        print("-------- Dados da Matrícula ----------")
-        print(f"ID: {matricula.id_matricula}")
-        print(f"Aluno: {matricula.aluno.nome}")
-        print(f"Turno: {matricula.turno.name}")
-        print(f"Plano: {matricula.plano.name}")
-        print(f"Mensalidade: {matricula.mensalidade}")
-        print(f"Data de Início: {matricula.data_inicio_matricula}")
-        print(f"Data de Vencimento: {matricula.data_vencimento_matricula}")
-        print(f"Data de Término: {matricula.data_termino_matricula}")
 
+    def mostra_dados_matricula(self, dados_matricula):
+        layout = [
+            [sg.Text("-------- Dados da Matrícula ----------")],
+            [sg.Text(f"ID: {dados_matricula['id_matricula']}")],
+            [sg.Text(f"Aluno: {dados_matricula['aluno']}")],
+            [sg.Text(f"Turno: {dados_matricula['turno']}")],
+            [sg.Text(f"Plano: {dados_matricula['plano']}")],
+            [sg.Text(f"Mensalidade: {dados_matricula['mensalidade']}")],
+            [sg.Text(f"Data de Início: {dados_matricula['data_inicio_matricula']}")],
+            [sg.Text(f"Data de Vencimento: {dados_matricula['data_vencimento_matricula']}")],
+            [sg.Text(f"Data de Término: {dados_matricula['data_termino_matricula']}")],
+            [sg.Button('OK')]
+        ]
+        window = sg.Window('Dados da Matrícula', layout)
+        while True:
+            event, values = window.read()
+            if event in (sg.WINDOW_CLOSED, 'OK'):
+                break
+        window.close()
+
+    def open(self):
+        button, values = self.__window.Read()
+        return button, values
+    
+    def close(self):
+        self.__window.Close()
+    
     def relatorios(self, resultado):
         print(resultado)
+
     def mostra_mensagem(self, msg):
 
         print(msg)

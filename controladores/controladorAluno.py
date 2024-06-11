@@ -15,9 +15,7 @@ class ControladorAluno():
         if nome_aluno:
             self.__tela_aluno.mostra_mensagem("Aluno já cadastrado")
             return
-        numero_telefone = dados_aluno['numero_telefone']
-        email = dados_aluno['email']
-        aluno = Aluno(nome, numero_telefone, email, matricula = None)
+        aluno = Aluno(dados_aluno['nome'], dados_aluno['numero_telefone'], dados_aluno['email'], matricula = None)
         self.__alunos.append(aluno)
         self.__tela_aluno.mostra_mensagem("Aluno cadastrado com sucesso")
         return aluno
@@ -43,7 +41,7 @@ class ControladorAluno():
             self.__tela_aluno.mostra_mensagem("Nenhum aluno cadastrado")
         else:
             for aluno in self.__alunos:
-                self.__tela_aluno.mostra_aluno(aluno)
+                self.__tela_aluno.mostra_aluno({"Nome do aluno ": aluno.nome, "Telefone do aluno": aluno.numero_telefone, "E-mail ": aluno.email})
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastrar_aluno, 2: self.remover_aluno, 3: self.listar_alunos, 4: self.buscar_aluno_por_nome, 0: self.retornar}

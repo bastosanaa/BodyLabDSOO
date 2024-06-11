@@ -1,6 +1,5 @@
 from modelos.matricula import Matricula
 from telas.telaMatricula import TelaMatricula
-from controladores.controladorAluno import ControladorAluno
 from modelos.plano import Plano
 from modelos.turno import Turno
 from datetime import datetime, timedelta
@@ -8,10 +7,9 @@ import random
 from collections import Counter
 
 class ControladorMatricula:
-    def __init__(self, controlador_aluno, controlador_sistema):
+    def __init__(self, controlador_sistema):
         self.__tela_matricula = TelaMatricula()
         self.__controlador_sistema = controlador_sistema
-        self.__controlador_aluno = controlador_aluno
         self.__matriculas = []
         self.__planos = [Plano.Silver, Plano.Gold, Plano.Diamond]
         self.__turnos = [Turno.Matutino, Turno.Vespertino, Turno.Noturno]
@@ -28,15 +26,26 @@ class ControladorMatricula:
 
     def realizar_matricula(self):
         dados_matricula = self.__tela_matricula.pega_dados_matricula(self.__turnos, self.__planos)
-        nome_aluno = dados_matricula['aluno']
-        aluno = self.__controlador_aluno.buscar_aluno_por_nome(nome_aluno)
-        if aluno is None:
-            return self.__tela_matricula.mostra_mensagem("Aluno não encontrado")
-        elif self.aluno_esta_matriculado(nome_aluno):
+        aluno = dados_matricula['aluno']
+        if self.aluno_esta_matriculado(aluno):
             return self.__tela_matricula.mostra_mensagem("Aluno já está matriculado")
         else:
             turno = dados_matricula['turno']
             plano = dados_matricula['plano']
+            
+            plano_selecionado = self.__tela_matricula.pega_dados_matricula(turno, plano)["plano"]
+
+            if plano_selecionado == "Diamond":
+                plano_selecionado = Plano.Diamond
+            elif plano_selecionado == "Gold":
+                plano_selecionado = Plano.Gold
+            elif plano_selecionado == "Silver":
+                plano_selecionado = Plano.Silver
+            else:
+                self.__tela_matricula.mostra_mensagem("Plano inválido. Por favor, selecione um plano válido.")
+                return
+
+            mensalidade = self.definir_mensalidade_de_acordo_com_plano(plano_selecionado)
             id_matricula = random.randint(1000, 9999)
 
             mensalidade = self.definir_mensalidade_de_acordo_com_plano(plano)
@@ -45,7 +54,6 @@ class ControladorMatricula:
             data_termino_matricula = data_inicio_matricula + timedelta(days=365)
             matricula = Matricula(id_matricula, turno, plano, mensalidade, aluno, data_inicio_matricula, data_vencimento_matricula, data_termino_matricula)
             self.__matriculas.append(matricula)
-            aluno.matricula = matricula
             self.__tela_matricula.mostra_mensagem(f"Matrícula realizada com sucesso!\nID da matrícula: {id_matricula}")
 
 
@@ -75,7 +83,15 @@ class ControladorMatricula:
             return self.__tela_matricula.mostra_mensagem("Não há matrículas cadastradas")
         else:
             for matricula in self.__matriculas:
-                self.__tela_matricula.mostra_dados_matricula(matricula)
+                self.__tela_matricula.mostra_dados_matricula({
+                                                              'id_matricula': matricula.id_matricula,
+                                                              'aluno': matricula.aluno,
+                                                              'turno': matricula.turno.name,
+                                                              'plano': matricula.plano.name,
+                                                              'mensalidade': matricula.mensalidade,
+                                                              'data_inicio_matricula': matricula.data_inicio_matricula,
+                                                              'data_vencimento_matricula': matricula.data_vencimento_matricula,
+                                                              'data_termino_matricula': matricula.data_termino_matricula})
 
     def vizualizar_matricula_especifica(self):
         id_matricula = self.__tela_matricula.seleciona_id_matricula()
@@ -90,6 +106,7 @@ class ControladorMatricula:
             if matricula.id_matricula == id_matricula:
                 return matricula
         return None
+
     def alterar_plano(self, id_matricula):
         matricula = self.buscar_matricula_por_id(id_matricula)
         if matricula is None:

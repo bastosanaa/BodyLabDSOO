@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/controladores/controladorAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorAluno.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controladores/controladorMatricula.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorMatricula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controladores/controladorSistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorSistema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modelos/plano.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelos/plano.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modelos/turno.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelos/turno.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telas/telaMatricula.py" beforeDir="false" afterPath="$PROJECT_DIR$/telas/telaMatricula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telas/telaSistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/telas/telaSistema.py" afterDir="false" />
-    </list>
+    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
