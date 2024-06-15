@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import random
 from collections import Counter
 
+
 class ControladorMatricula:
     def __init__(self, controlador_sistema):
         self.__tela_matricula = TelaMatricula()
@@ -27,43 +28,41 @@ class ControladorMatricula:
     def realizar_matricula(self):
         dados_matricula = self.__tela_matricula.pega_dados_matricula(self.__turnos, self.__planos)
         aluno = dados_matricula['aluno']
+        if not self.__controlador_sistema.controlador_aluno.aluno_esta_cadastrado(aluno):
+            return self.__tela_matricula.mostra_mensagem("Aluno não está cadastrado")
         if self.aluno_esta_matriculado(aluno):
             return self.__tela_matricula.mostra_mensagem("Aluno já está matriculado")
         else:
             turno = dados_matricula['turno']
             plano = dados_matricula['plano']
-            
-            plano_selecionado = self.__tela_matricula.pega_dados_matricula(turno, plano)["plano"]
 
-            if plano_selecionado == "Diamond":
-                plano_selecionado = Plano.Diamond
-            elif plano_selecionado == "Gold":
-                plano_selecionado = Plano.Gold
-            elif plano_selecionado == "Silver":
-                plano_selecionado = Plano.Silver
+            if plano == "Diamond":
+                plano = Plano.Diamond
+            elif plano == "Gold":
+                plano = Plano.Gold
+            elif plano == "Silver":
+                plano = Plano.Silver
             else:
                 self.__tela_matricula.mostra_mensagem("Plano inválido. Por favor, selecione um plano válido.")
                 return
 
-            mensalidade = self.definir_mensalidade_de_acordo_com_plano(plano_selecionado)
             id_matricula = random.randint(1000, 9999)
-
             mensalidade = self.definir_mensalidade_de_acordo_com_plano(plano)
             data_inicio_matricula = datetime.now()
             data_vencimento_matricula = data_inicio_matricula + timedelta(days=30)
             data_termino_matricula = data_inicio_matricula + timedelta(days=365)
-            matricula = Matricula(id_matricula, turno, plano, mensalidade, aluno, data_inicio_matricula, data_vencimento_matricula, data_termino_matricula)
+            matricula = Matricula(id_matricula, turno, plano, mensalidade, aluno, data_inicio_matricula,
+                                  data_vencimento_matricula, data_termino_matricula)
             self.__matriculas.append(matricula)
             self.__tela_matricula.mostra_mensagem(f"Matrícula realizada com sucesso!\nID da matrícula: {id_matricula}")
 
-
-    def definir_mensalidade_de_acordo_com_plano(self, plano_selecionado):
+    def definir_mensalidade_de_acordo_com_plano(self, plano):
         mensalidade = 0.0
-        if plano_selecionado == Plano.Diamond:
+        if plano == Plano.Diamond:
             mensalidade = 350.0
-        elif plano_selecionado == Plano.Gold:
+        elif plano == Plano.Gold:
             mensalidade += 250.0
-        elif plano_selecionado == Plano.Silver:
+        elif plano == Plano.Silver:
             mensalidade = 150.0
         else:
             raise ValueError("Plano inválido")
@@ -83,23 +82,34 @@ class ControladorMatricula:
             return self.__tela_matricula.mostra_mensagem("Não há matrículas cadastradas")
         else:
             for matricula in self.__matriculas:
-                self.__tela_matricula.mostra_dados_matricula({
-                                                              'id_matricula': matricula.id_matricula,
-                                                              'aluno': matricula.aluno,
-                                                              'turno': matricula.turno.name,
-                                                              'plano': matricula.plano.name,
-                                                              'mensalidade': matricula.mensalidade,
-                                                              'data_inicio_matricula': matricula.data_inicio_matricula,
-                                                              'data_vencimento_matricula': matricula.data_vencimento_matricula,
-                                                              'data_termino_matricula': matricula.data_termino_matricula})
+                self.__tela_matricula.lista_de_matricula({
+                    'id_matricula': matricula.id_matricula,
+                    'aluno': matricula.aluno,
+                    'turno': matricula.turno,
+                    'plano': matricula.plano.name,
+                    'mensalidade': matricula.mensalidade,
+                    'data_inicio_matricula': matricula.data_inicio_matricula,
+                    'data_vencimento_matricula': matricula.data_vencimento_matricula,
+                    'data_termino_matricula': matricula.data_termino_matricula})
 
     def vizualizar_matricula_especifica(self):
         id_matricula = self.__tela_matricula.seleciona_id_matricula()
         matricula = self.buscar_matricula_por_id(id_matricula)
         if matricula:
-            self.__tela_matricula.mostra_dados_matricula(matricula)
+            dados_matricula = {
+                'id_matricula': matricula.id_matricula,
+                'aluno': matricula.aluno,
+                'turno': matricula.turno,
+                'plano': matricula.plano.name,
+                'mensalidade': matricula.mensalidade,
+                'data_inicio_matricula': matricula.data_inicio_matricula,
+                'data_vencimento_matricula': matricula.data_vencimento_matricula,
+                'data_termino_matricula': matricula.data_termino_matricula
+            }
+            self.__tela_matricula.mostra_matricula(dados_matricula)
         else:
             self.__tela_matricula.mostra_mensagem("Matrícula não encontrada")
+
 
     def buscar_matricula_por_id(self, id_matricula):
         for matricula in self.__matriculas:
@@ -112,7 +122,17 @@ class ControladorMatricula:
         if matricula is None:
             return self.__tela_matricula.mostra_mensagem("Matrícula não encontrada")
 
-        plano = self.__tela_matricula.seleciona_plano(self.__planos)
+        plano = self.__tela_matricula.pega_dados_plano()
+        if plano == "Diamond":
+            plano = Plano.Diamond
+        elif plano == "Gold":
+            plano = Plano.Gold
+        elif plano == "Silver":
+            plano = Plano.Silver
+        else:
+            self.__tela_matricula.mostra_mensagem("Plano inválido. Por favor, selecione um plano válido.")
+            return
+
         matricula.plano = plano
         matricula.mensalidade = self.definir_mensalidade_de_acordo_com_plano(plano)
         self.__tela_matricula.mostra_mensagem("Plano alterado com sucesso")
@@ -122,7 +142,17 @@ class ControladorMatricula:
         if matricula is None:
             return self.__tela_matricula.mostra_mensagem("Matrícula não encontrada")
 
-        turno = self.__tela_matricula.seleciona_turno(self.__turnos)
+        turno_str = self.__tela_matricula.pega_dados_turno()
+        if turno_str == "Matutino":
+            turno = Turno.Matutino
+        elif turno_str == "Vespertino":
+            turno = Turno.Vespertino
+        elif turno_str == "Noturno":
+            turno = Turno.Noturno
+        else:
+            self.__tela_matricula.mostra_mensagem("Turno inválido. Por favor, selecione um turno válido.")
+            return
+
         matricula.turno = turno
         self.__tela_matricula.mostra_mensagem("Turno alterado com sucesso")
 
@@ -138,7 +168,7 @@ class ControladorMatricula:
 
         if len(planos_mais_procurados) > 1:
             nomes_planos = ", ".join(plano.name for plano in planos_mais_procurados)
-            return self.__tela_matricula.relatorios(f"Há um empate entre os seguintes planos: {nomes_planos}")
+            return self.__tela_matricula.relatorios(f"Os planos mais vendidos são: {nomes_planos}")
         else:
             return self.__tela_matricula.relatorios(f"Plano mais vendido: {planos_mais_procurados[0].name}")
 
@@ -153,13 +183,14 @@ class ControladorMatricula:
         turnos_mais_procurados = [turno for turno, vendas in contagem_turnos.items() if vendas == max_vendas]
 
         if len(turnos_mais_procurados) > 1:
-            nomes_turnos = ", ".join(turno.name for turno in turnos_mais_procurados)
-            self.__tela_matricula.relatorios(f"Há um empate entre os seguintes turnos: {nomes_turnos}")
+            nomes_turnos = ", ".join(turno for turno in turnos_mais_procurados)
+            self.__tela_matricula.relatorios(f"Os turnos mais procurados são: {nomes_turnos}")
         else:
-            self.__tela_matricula.relatorios(f"Turno mais vendido: {turnos_mais_procurados[0].name}")
+            self.__tela_matricula.relatorios(f"Turno mais vendido: {turnos_mais_procurados[0]}")
 
     def abre_tela(self):
-        lista_opcoes = {1: self.realizar_matricula, 2: self.cancelar_matricula, 3: self.lista_matriculas, 4: self.vizualizar_matricula_especifica,
+        lista_opcoes = {1: self.realizar_matricula, 2: self.cancelar_matricula, 3: self.lista_matriculas,
+                        4: self.vizualizar_matricula_especifica,
                         5: lambda: self.alterar_plano(self.__tela_matricula.seleciona_id_matricula()),
                         6: lambda: self.alterar_turno(self.__tela_matricula.seleciona_id_matricula()),
                         7: self.plano_mais_procurado, 8: self.turno_mais_procurado, 0: self.retornar}
