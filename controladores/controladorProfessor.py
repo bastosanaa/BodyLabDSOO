@@ -26,7 +26,13 @@ class ControladorProfessor():
         self.__controlador_sistema.abre_tela()
 
     def abre_tela(self):
-        lista_opcoes = {1: self.mostrar_professores_cadastrados, 2: self.cadastar_professor, 3: self.vizualizar_professor, 4: self.vizualizar_professor, 5: self.professores_por_turno, 0: self.retornar}
+        lista_opcoes = {
+            1: self.mostrar_professores_cadastrados,
+            2: self.cadastar_professor,
+            3: self.vizualizar_professor,
+            4: self.vizualizar_professor,
+            5: self.professores_por_turno,
+            0: self.retornar}
 
         while True:
             opcao_escolhida = self.__tela_professor.tela_opcoes()
