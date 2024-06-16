@@ -31,11 +31,14 @@ class ControladorProfessor():
         turno = dados_professor['turno']
         salario = dados_professor['salario']
 
-        for professor in self.__professores:
-            if professor.nome == nome and professor.email == email:
-                raise ProfessorDuplicado
-        novo_professor = Professor(nome, numero_telefone, email, turno, salario)
-        self.__professores.append(novo_professor)
+        try:
+            for professor in self.__professores:
+                if professor.nome == nome and professor.email == email:
+                    raise ProfessorDuplicado
+            novo_professor = Professor(nome, numero_telefone, email, turno, salario)
+            self.__professores.append(novo_professor)
+        except ProfessorDuplicado:
+            self.__tela_professor.mostra_mensagem("Erro. Este professor já está cadastrado no sistema.")
 
     def alterar_professor(self):
         pass

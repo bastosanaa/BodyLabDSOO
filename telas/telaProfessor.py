@@ -128,7 +128,6 @@ class TelaProfessor(TelaAbstrata):
     def verifica_telefone(self, numero_telefone):
         try:
             if numero_telefone:
-                print(type(numero_telefone))
                 if len(numero_telefone) < 9 or len(numero_telefone) > 12:
                     raise NumeroTelefoneInvalido
                 numero_telefone = int(numero_telefone)
