@@ -8,6 +8,27 @@ class ControladorProfessor():
         self.__tela_professor = TelaProfessor()
         self.__professores = []
         
+    def cadastar_professor(self):
+        try:
+            dados_professor = self.__tela_professor.pega_dados_novo_professor()
+            nome = dados_professor['nome']
+            numero_telefone = dados_professor['numero_telefone']
+            email = dados_professor['email']
+            turno = dados_professor['turno']
+            salario = dados_professor['salario']
+
+            try:
+                for professor in self.__professores:
+                    if professor.nome == nome and professor.email == email:
+                        raise ProfessorDuplicado
+                novo_professor = Professor(nome, numero_telefone, email, turno, salario)
+                self.__professores.append(novo_professor)
+                self.__tela_professor.mostra_mensagem("Professor adicionado com sucesso!")
+            except ProfessorDuplicado:
+                self.__tela_professor.mostra_mensagem("Erro. Este professor já está cadastrado no sistema.")
+        except TypeError:
+            self.__tela_professor.mostra_mensagem("Operação Cancelada.")
+
     def listar_professores(self):
         if not self.__professores:
             self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
@@ -23,26 +44,8 @@ class ControladorProfessor():
                 'turno': professor.turno,
                 'salario': professor.salario
             }
-            #arrumar uma tela bonitinha para mostrar os professores
             self.__tela_professor.mostra_professor(dados_professor, contagem_professor, numero_professores)
         
-
-    def cadastar_professor(self):
-        dados_professor = self.__tela_professor.pega_dados_novo_professor()
-        nome = dados_professor['nome']
-        numero_telefone = dados_professor['numero_telefone']
-        email = dados_professor['email']
-        turno = dados_professor['turno']
-        salario = dados_professor['salario']
-
-        try:
-            for professor in self.__professores:
-                if professor.nome == nome and professor.email == email:
-                    raise ProfessorDuplicado
-            novo_professor = Professor(nome, numero_telefone, email, turno, salario)
-            self.__professores.append(novo_professor)
-        except ProfessorDuplicado:
-            self.__tela_professor.mostra_mensagem("Erro. Este professor já está cadastrado no sistema.")
 
     def alterar_professor(self):
         pass
@@ -50,11 +53,11 @@ class ControladorProfessor():
     def vizualizar_professor(self):
         pass
 
+    def remover_professor(self):
+        pass
     def professores_por_turno(self):
         pass
 
-    def remover_professor(self):
-        pass
 
     def relatorio_professores_turno(self):
         pass

@@ -111,33 +111,36 @@ class TelaProfessor(TelaAbstrata):
             [sg.InputText('', key='email')],
             [sg.Text('Turno: ')],
             [sg.Combo(turnos, key='turno', readonly=True)],
-            [sg.Text('Salario: (apenas números)')],
+            [sg.Text('Salário: (apenas números)')],
             [sg.InputText('', key='salario')],
-            [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
+            [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
         ]
-        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+        self.__window = sg.Window('Sistema BodyLab', layout)
 
         button, values = self.open()
-        nome = values['nome']
-        numero_telefone = values['numero_telefone']
-        email = values['email']
-        turno = values['turno']
-        salario = values['salario']
         self.close()
 
-        self.verifica_nome(nome)
-        self.verifica_telefone(numero_telefone)
-        self.verifica_email(email)
-        self.verifica_turno(turno)
-        self.verifica_salario(salario)
+        if button == 'Confirmar':
+            nome = values['nome']
+            numero_telefone = values['numero_telefone']
+            email = values['email']
+            turno = values['turno']
+            salario = values['salario']
 
-        return {
+            # Realizando as verificações
+            self.verifica_nome(nome)
+            self.verifica_telefone(numero_telefone)
+            self.verifica_email(email)
+            self.verifica_turno(turno)
+            self.verifica_salario(salario)
+
+            return {
                 "nome": nome,
                 "numero_telefone": numero_telefone,
                 "email": email,
                 "turno": turno,
                 "salario": salario
-                }
+            }
     
     # verificacoes de entrada na criacao do professor
     def verifica_nome(self, nome):
