@@ -73,6 +73,29 @@ class TelaProfessor(TelaAbstrata):
 
         self.__window.close()
 
+    def mostra_professor(self, dados_professor, numero_professor, numero_professores):
+        sg.ChangeLookAndFeel('DarkPurple1')
+
+        layout = [
+        [sg.Text(f'professor {numero_professor}/{numero_professores}', font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text(f"Nome: {dados_professor['nome']}")],
+        [sg.Text(f"Número de Telefone: {dados_professor['numero_telefone']}")],
+        [sg.Text(f"E-mail: {dados_professor['email']}")],
+        [sg.Text(f"Turno: {dados_professor['turno']}")],
+        [sg.Text(f"Salário: {dados_professor['salario']}")],
+        [sg.Cancel('Cancelar', button_color=('white', 'red'))]
+        ]
+
+        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+
+
+        while True:
+            event, values = self.__window.read()
+            if event in (sg.WIN_CLOSED, 'Cancelar'):
+                break
+
+        self.__window.close()
+
     def pega_dados_novo_professor(self):
         sg.ChangeLookAndFeel('DarkPurple1')
 
@@ -159,7 +182,6 @@ class TelaProfessor(TelaAbstrata):
             self.mostra_mensagem("Tente Novamente. O campo email não foi preenchido corretamente")
     
     def verifica_turno(self, turno):
-        #verificar se turno pertence a classe turno
         try:
             if turno:
                 return
@@ -181,3 +203,6 @@ class TelaProfessor(TelaAbstrata):
             self.mostra_mensagem("Tente Novamente. Salário inválido (dê um salário digno ao seu funcionário!)")
         except ValueError:
             self.mostra_mensagem("Tente Novamente. O salário não foi preenchido corretamente")
+
+
+    

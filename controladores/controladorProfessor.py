@@ -12,7 +12,10 @@ class ControladorProfessor():
         if not self.__professores:
             self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
             return
+        contagem_professor = 0
+        numero_professores = len(self.__professores)
         for professor in self.__professores:
+            contagem_professor += 1
             dados_professor = {
                 'nome': professor.nome,
                 'numero_telefone' : professor.numero_telefone,
@@ -21,7 +24,7 @@ class ControladorProfessor():
                 'salario': professor.salario
             }
             #arrumar uma tela bonitinha para mostrar os professores
-            self.__tela_professor.mostra_mensagem(dados_professor)
+            self.__tela_professor.mostra_professor(dados_professor, contagem_professor, numero_professores)
         
 
     def cadastar_professor(self):
