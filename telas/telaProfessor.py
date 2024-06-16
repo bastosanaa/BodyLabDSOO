@@ -23,7 +23,6 @@ class TelaProfessor(TelaAbstrata):
         "3" : 3,
         "4" : 4,
         "5" : 5,
-        "6" : 6
         }
 
         if button in (None, "Cancelar"):
@@ -45,8 +44,7 @@ class TelaProfessor(TelaAbstrata):
             [sg.Radio('Remover Professor', "RD1", key='2')],
             [sg.Radio('Alterar Professor Cadastrado', "RD1", key='3')],
             [sg.Radio('Listar Professores', "RD1", key='4')],
-            [sg.Radio('Alterar Professor Cadastrado', "RD1", key='5')],
-            [sg.Radio('Relatorio Professores por Turno', "RD1", key='6')],
+            [sg.Radio('Relatorio Professores por Turno', "RD1", key='5')],
             [sg.Radio('Retornar', "RD1", key='0')],
             [sg.Button('Confirmar',button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
@@ -97,6 +95,81 @@ class TelaProfessor(TelaAbstrata):
 
         self.__window.close()
 
+
+    def pega_dados_alterar_professor(self):
+        sg.ChangeLookAndFeel('DarkPurple1')
+
+        layout = [
+        [sg.Text("insira os dados do professor a ser removido", font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text('Nome: ', )],
+        [sg.InputText('', key='nome')],
+        [sg.Text('Email: ', )],
+        [sg.InputText('', key='email')],
+        [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
+        ]
+
+        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+
+        button, values = self.open()
+        self.close()
+
+        if button == 'Confirmar':
+            nome = values['nome']
+            email = values['email']
+
+            return {
+                    "nome": nome,
+                    "email": email
+                }
+
+    def pega_alteracoes_professor(self, dados_professor):
+        sg.ChangeLookAndFeel('DarkPurple1')
+
+        turnos = [turno.value for turno in Turno]
+
+        layout = [
+        [sg.Text('Alterar Professor', font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text('Dados do professor:', font=('Helvetica', 15, 'bold'), justification='center')],
+        [sg.Text(f"Nome: {dados_professor['nome']}")],
+        [sg.Text(f"Número de Telefone: {dados_professor['numero_telefone']}")],
+        [sg.Text(f"E-mail: {dados_professor['email']}")],
+        [sg.Text(f"Turno: {dados_professor['turno']}")],
+        [sg.Text(f"Salário: {dados_professor['salario']}")],
+        [sg.Text('Alterações:', font=('Helvetica', 15, 'bold'), justification='center')],
+        [sg.Text('Nome: ', )],
+        [sg.InputText('', key='nome')],
+        [sg.Text('Número de Telefone: (apenas números)')],
+        [sg.InputText('', key='numero_telefone')],
+        [sg.Text('E-mail: ')],
+        [sg.InputText('', key='email')],
+        [sg.Text('Turno: ')],
+        [sg.Combo(turnos, key='turno', readonly=True)],
+        [sg.Text('Salário: (apenas números)')],
+        [sg.InputText('', key='salario')],
+        [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
+        ]
+
+        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+
+        button, values = self.open()
+
+        if button == 'Confirmar':
+            nome = values['nome']
+            numero_telefone = values['numero_telefone']
+            email = values['email']
+            turno = values['turno']
+            salario = values['salario']
+
+            return {
+                "nome": nome,
+                "numero_telefone": numero_telefone,
+                "email": email,
+                "turno": turno,
+                "salario": salario
+            }
+            
+
+
     def pega_dados_novo_professor(self):
         sg.ChangeLookAndFeel('DarkPurple1')
 
@@ -129,11 +202,28 @@ class TelaProfessor(TelaAbstrata):
             salario = values['salario']
 
             # Realizando as verificações
-            self.verifica_nome(nome)
-            self.verifica_telefone(numero_telefone)
-            self.verifica_email(email)
-            self.verifica_turno(turno)
-            self.verifica_salario(salario)
+            #ESTA DEIXANDO CRIAR COM OS DADOS ERRADOS
+            try:
+                self.verifica_nome(nome)
+                self.verifica_telefone(numero_telefone)
+                self.verifica_email(email)
+                self.verifica_turno(turno)
+                self.verifica_salario(salario)
+            except NomeNaoEhAlfa:
+                self.mostra_mensagem("Tente Novamente. Nome inválido")
+                return
+            except NumeroTelefoneInvalido:
+                self.mostra_mensagem("Tente Novamente. Número de telefone inválido (utilize apenas números)")
+                return
+            except EmailInvalido:
+                self.mostra_mensagem("Tente Novamente. Email inválido")
+                return
+            except SalarioInvalido:
+                self.mostra_mensagem("Tente Novamente. Salário inválido (dê um salário digno ao seu funcionário!)")
+                return
+            except ValueError:
+                self.mostra_mensagem("Tente Novamente. Preencha todos os campos")
+                return
 
             return {
                 "nome": nome,
@@ -191,69 +281,45 @@ class TelaProfessor(TelaAbstrata):
         self.__window.close()
 
     # verificacoes de entrada na criacao do professor
+    
     def verifica_nome(self, nome):
-        try:
+        
             if nome:
                 if not nome.isalpha():
                     raise NomeNaoEhAlfa
                 return
             raise ValueError
-        except NomeNaoEhAlfa:
-            self.mostra_mensagem("Tente Novamente. Nome inválido")
-        except ValueError:
-            self.mostra_mensagem("Tente Novamente. O campo nome não foi preenchido corretamente")
+        # except ValueError:
+        #     self.mostra_mensagem("Tente Novamente. O campo nome não foi preenchido corretamente")
     
     def verifica_telefone(self, numero_telefone):
-        try:
             if numero_telefone:
                 if len(numero_telefone) < 9 or len(numero_telefone) > 12:
                     raise NumeroTelefoneInvalido
                 numero_telefone = int(numero_telefone)
                 return
             raise ValueError
-        except NumeroTelefoneInvalido:
-
-            self.mostra_mensagem("Tente Novamente. Número de telefone inválido (utilize apenas números)")
-        except ValueError:
-
-            self.mostra_mensagem("Tente Novamente. O campo número de telefone não foi preenchido corretamemte")
 
     def verifica_email(self, email):
-        try:
             if email:
                 if '@' not in email:
                     raise EmailInvalido
                 return
             raise ValueError
-        except EmailInvalido:
-
-            self.mostra_mensagem("Tente Novamente. Email inválido")
-        except ValueError:
-
-            self.mostra_mensagem("Tente Novamente. O campo email não foi preenchido corretamente")
     
     def verifica_turno(self, turno):
-        try:
             if turno:
                 return
             raise ValueError
-        except ValueError:
-
-            self.mostra_mensagem("Tente Novamente. O turno não foi preenchido corretamente")
         
     def verifica_salario(self, salario):
         salario_minimo = 1420
-        try:
-            if salario:
-                salario = int(salario)
-                if salario < salario_minimo:
-                    raise SalarioInvalido
-                return
-            raise ValueError
-        except SalarioInvalido:
-            self.mostra_mensagem("Tente Novamente. Salário inválido (dê um salário digno ao seu funcionário!)")
-        except ValueError:
-            self.mostra_mensagem("Tente Novamente. O salário não foi preenchido corretamente")
-
+        if salario:
+            salario = int(salario)
+            if salario < salario_minimo:
+                raise SalarioInvalido
+            return
+        raise ValueError
+    
 
     

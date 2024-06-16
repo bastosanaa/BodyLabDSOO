@@ -13,9 +13,9 @@ class ControladorProfessor():
             'noturno': 0
         }
 
-        @property
-        def professores_por_turno(self):
-            return self.__professores_por_turno
+    @property
+    def professores_por_turno(self):
+        return self.__professores_por_turno
         
     def adicionar_professor_turno(self, turno):
         self.__professores_por_turno[turno] += 1
@@ -60,8 +60,39 @@ class ControladorProfessor():
             self.__tela_professor.mostra_professor(dados_professor, contagem_professor, numero_professores)
         
 
-    def alterar_professor(self):
-        pass
+    def selecionar_professor_a_alterar(self):
+        #perguntar qual professor 
+        if self.__professores:
+            try:
+                dados_professor = self.__tela_professor.pega_dados_alterar_professor()
+                nome = dados_professor['nome']
+                email = dados_professor['email']
+
+                for professor in self.__professores:
+                    if professor.nome == nome and professor.email == email:
+                        dados_professor = {
+                        'nome': professor.nome,
+                        'numero_telefone' : professor.numero_telefone,
+                        'email': professor.email,
+                        'turno': professor.turno,
+                        'salario': professor.salario
+                        }
+                        print(dados_professor)
+                        self.alterar_professor_selecionado(professor,dados_professor)
+                        return
+            except TypeError as e:
+                print(e)
+                self.__tela_professor.mostra_mensagem("Operação Cancelada.")
+        self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
+
+    def alterar_professor_selecionado(self, professor, dados_professor):
+        #TERMINAR ESSA FUNCAO
+        alteracoes = self.__tela_professor.pega_alteracoes_professor(dados_professor)
+        print(professor)
+        for key, value in alteracoes.items():
+            if value:
+                professor[key] = value
+        print(professor)
 
     def remover_professor(self):
         if self.__professores:
@@ -91,10 +122,9 @@ class ControladorProfessor():
         lista_opcoes = {
             1: self.cadastar_professor,
             2: self.remover_professor,
-            3: self.alterar_professor,
+            3: self.selecionar_professor_a_alterar,
             4: self.listar_professores,
-            5: self.alterar_professor,
-            6: self.relatorio_professores_turno,
+            5: self.relatorio_professores_turno,
             0: self.retornar}
 
         while True:
