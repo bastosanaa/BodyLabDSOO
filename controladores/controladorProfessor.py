@@ -7,7 +7,19 @@ class ControladorProfessor():
         self.__controlador_sistema = controlador_sistema
         self.__tela_professor = TelaProfessor()
         self.__professores = []
+        self.__professores_por_turno = {
+            'matutino': 0,
+            'vespertino': 0,
+            'noturno': 0
+        }
+
+        @property
+        def professores_por_turno(self):
+            return self.__professores_por_turno
         
+    def adicionar_professor_turno(self, turno):
+        self.__professores_por_turno[turno] += 1
+
     def cadastar_professor(self):
         try:
             dados_professor = self.__tela_professor.pega_dados_novo_professor()
@@ -23,6 +35,7 @@ class ControladorProfessor():
                         raise ProfessorDuplicado
                 novo_professor = Professor(nome, numero_telefone, email, turno, salario)
                 self.__professores.append(novo_professor)
+                self.adicionar_professor_turno(turno)
                 self.__tela_professor.mostra_mensagem("Professor adicionado com sucesso!")
             except ProfessorDuplicado:
                 self.__tela_professor.mostra_mensagem("Erro. Este professor já está cadastrado no sistema.")
@@ -50,9 +63,6 @@ class ControladorProfessor():
     def alterar_professor(self):
         pass
 
-    def vizualizar_professor(self):
-        pass
-
     def remover_professor(self):
         if self.__professores:
             try:
@@ -71,13 +81,8 @@ class ControladorProfessor():
                 self.__tela_professor.mostra_mensagem("Operação Cancelada.")
         self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
 
-
-    def professores_por_turno(self):
-        pass
-
-
     def relatorio_professores_turno(self):
-        pass
+        self.__tela_professor.mostrar_relatorio_prof_turno(self.__professores_por_turno)
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()

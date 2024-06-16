@@ -22,7 +22,8 @@ class TelaProfessor(TelaAbstrata):
         "2" : 2,
         "3" : 3,
         "4" : 4,
-        "5" : 5
+        "5" : 5,
+        "6" : 6
         }
 
         if button in (None, "Cancelar"):
@@ -167,6 +168,27 @@ class TelaProfessor(TelaAbstrata):
                     "nome": nome,
                     "email": email
                 }
+
+    def mostrar_relatorio_prof_turno(self, professores_por_turno):
+        sg.ChangeLookAndFeel('DarkPurple1')
+
+        layout = [
+        [sg.Text("Professores por turno", font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text(f"Matutino: {professores_por_turno['matutino']} professor(es)")],
+        [sg.Text(f"Vespertino: {professores_por_turno['vespertino']} professor(es)")],
+        [sg.Text(f"Noturno: {professores_por_turno['noturno']} professor(es)")],
+        [sg.Cancel('Cancelar', button_color=('white', 'red'))]
+        ]
+
+        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+
+
+        while True:
+            event, values = self.__window.read()
+            if event in (sg.WIN_CLOSED, 'Cancelar'):
+                break
+
+        self.__window.close()
 
     # verificacoes de entrada na criacao do professor
     def verifica_nome(self, nome):
