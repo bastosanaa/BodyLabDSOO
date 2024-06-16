@@ -20,6 +20,7 @@ class ControladorProfessor():
                 'turno': professor.turno,
                 'salario': professor.salario
             }
+            #arrumar uma tela bonitinha para mostrar os professores
             self.__tela_professor.mostra_mensagem(dados_professor)
         
 

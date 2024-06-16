@@ -5,6 +5,7 @@ from Exception.NomeNaoEhAlfa import NomeNaoEhAlfa
 from Exception.EmailInvalido import EmailInvalido
 from Exception.SalarioInválido import SalarioInvalido
 from telas.telaAbstrata import TelaAbstrata
+from modelos.turno import Turno
 
 class TelaProfessor(TelaAbstrata):
     def __init__(self):
@@ -74,6 +75,9 @@ class TelaProfessor(TelaAbstrata):
 
     def pega_dados_novo_professor(self):
         sg.ChangeLookAndFeel('DarkPurple1')
+
+        turnos = [turno.value for turno in Turno]
+
         layout = [
             [sg.Text("Cadastrar Professor", font=('Helvetica', 25, 'bold'), justification='center')],
             [sg.Text('Nome: ', )],
@@ -83,7 +87,7 @@ class TelaProfessor(TelaAbstrata):
             [sg.Text('E-mail: ')],
             [sg.InputText('', key='email')],
             [sg.Text('Turno: ')],
-            [sg.InputText('', key='turno')],
+            [sg.Combo(turnos, key='turno', readonly=True)],
             [sg.Text('Salario: (apenas números)')],
             [sg.InputText('', key='salario')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
