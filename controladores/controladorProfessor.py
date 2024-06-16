@@ -54,7 +54,24 @@ class ControladorProfessor():
         pass
 
     def remover_professor(self):
-        pass
+        if self.__professores:
+            try:
+                dados_professor = self.__tela_professor.pega_dados_remover_professor()
+                nome = dados_professor['nome']
+                email = dados_professor['email']
+
+                for professor in self.__professores:
+                    if professor.nome == nome and professor.email == email:
+                        self.__professores.remove(professor)
+                        self.__tela_professor.mostra_mensagem("Professor removido com sucesso!")
+                        return
+                self.__tela_professor.mostra_mensagem("Tente novamente. Professor não encontrado no sistema.")
+                return
+            except TypeError:
+                self.__tela_professor.mostra_mensagem("Operação Cancelada.")
+        self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
+
+
     def professores_por_turno(self):
         pass
 

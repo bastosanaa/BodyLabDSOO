@@ -77,7 +77,7 @@ class TelaProfessor(TelaAbstrata):
         sg.ChangeLookAndFeel('DarkPurple1')
 
         layout = [
-        [sg.Text(f'professor {numero_professor}/{numero_professores}', font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text(f'Professor {numero_professor}/{numero_professores}', font=('Helvetica', 25, 'bold'), justification='center')],
         [sg.Text(f"Nome: {dados_professor['nome']}")],
         [sg.Text(f"Número de Telefone: {dados_professor['numero_telefone']}")],
         [sg.Text(f"E-mail: {dados_professor['email']}")],
@@ -142,6 +142,32 @@ class TelaProfessor(TelaAbstrata):
                 "salario": salario
             }
     
+    def pega_dados_remover_professor(self):
+        sg.ChangeLookAndFeel('DarkPurple1')
+
+        layout = [
+        [sg.Text("insira os dados do professor a ser removido", font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text('Nome: ', )],
+        [sg.InputText('', key='nome')],
+        [sg.Text('Email: ', )],
+        [sg.InputText('', key='email')],
+        [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
+        ]
+
+        self.__window = sg.Window('Sistema BodyLab', layout)
+
+        button, values = self.open()
+        self.close()
+
+        if button == 'Confirmar':
+            nome = values['nome']
+            email = values['email']
+
+            return {
+                    "nome": nome,
+                    "email": email
+                }
+
     # verificacoes de entrada na criacao do professor
     def verifica_nome(self, nome):
         try:
