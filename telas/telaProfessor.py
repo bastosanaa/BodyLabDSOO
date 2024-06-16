@@ -7,7 +7,9 @@ from Exception.SalarioInválido import SalarioInvalido
 from telas.telaAbstrata import TelaAbstrata
 
 class TelaProfessor(TelaAbstrata):
-
+    def __init__(self):
+        self.__window = None
+        self.init_opcoes()
 
     def tela_opcoes(self):
         self.init_opcoes()
@@ -70,7 +72,7 @@ class TelaProfessor(TelaAbstrata):
 
         self.__window.close()
 
-    def pega_dados_professor(self):
+    def pega_dados_novo_professor(self):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
             [sg.Text("Cadastrar Professor", font=('Helvetica', 25, 'bold'), justification='center')],
@@ -94,6 +96,7 @@ class TelaProfessor(TelaAbstrata):
         email = values['email']
         turno = values['turno']
         salario = values['salario']
+        self.close()
 
         self.verifica_nome(nome)
         self.verifica_telefone(numero_telefone)
@@ -101,7 +104,6 @@ class TelaProfessor(TelaAbstrata):
         self.verifica_turno(turno)
         self.verifica_salario(salario)
 
-        self.close()
         return {
                 "nome": nome,
                 "numero_telefone": numero_telefone,
@@ -119,27 +121,25 @@ class TelaProfessor(TelaAbstrata):
                 return
             raise ValueError
         except NomeNaoEhAlfa:
-            self.close()
             self.mostra_mensagem("Tente Novamente. Nome inválido")
         except ValueError:
-            self.close()
-            self.mostra_mensagem("Tente Novamente. O campo nome não foi preenchido")
+            self.mostra_mensagem("Tente Novamente. O campo nome não foi preenchido corretamente")
     
     def verifica_telefone(self, numero_telefone):
         try:
             if numero_telefone:
-                if isinstance(numero_telefone, int):
-                    if numero_telefone < 9 or numero_telefone > 12:
-                        raise NumeroTelefoneInvalido
-                    return
-                raise NumeroTelefoneInvalido
+                print(type(numero_telefone))
+                if len(numero_telefone) < 9 or len(numero_telefone) > 12:
+                    raise NumeroTelefoneInvalido
+                numero_telefone = int(numero_telefone)
+                return
             raise ValueError
         except NumeroTelefoneInvalido:
-            self.close()
+
             self.mostra_mensagem("Tente Novamente. Número de telefone inválido (utilize apenas números)")
         except ValueError:
-            self.close()
-            self.mostra_mensagem("Tente Novamente. O campo número de telefone não foi preenchido")
+
+            self.mostra_mensagem("Tente Novamente. O campo número de telefone não foi preenchido corretamemte")
 
     def verifica_email(self, email):
         try:
@@ -149,34 +149,32 @@ class TelaProfessor(TelaAbstrata):
                 return
             raise ValueError
         except EmailInvalido:
-            self.close()
+
             self.mostra_mensagem("Tente Novamente. Email inválido")
         except ValueError:
-            self.close()
-            self.mostra_mensagem("Tente Novamente. O campo email não foi preenchido")
+
+            self.mostra_mensagem("Tente Novamente. O campo email não foi preenchido corretamente")
     
     def verifica_turno(self, turno):
+        #verificar se turno pertence a classe turno
         try:
             if turno:
                 return
             raise ValueError
         except ValueError:
-            self.close()
-            self.mostra_mensagem("Tente Novamente. O turno não foi preenchido")
+
+            self.mostra_mensagem("Tente Novamente. O turno não foi preenchido corretamente")
         
     def verifica_salario(self, salario):
         salario_minimo = 1420
         try:
             if salario:
-                if isinstance(salario, int):
-                    if salario < salario_minimo:
-                        raise SalarioInvalido
-                    return
-                raise SalarioInvalido
+                salario = int(salario)
+                if salario < salario_minimo:
+                    raise SalarioInvalido
+                return
             raise ValueError
         except SalarioInvalido:
-            self.close()
             self.mostra_mensagem("Tente Novamente. Salário inválido (dê um salário digno ao seu funcionário!)")
         except ValueError:
-            self.close()
-            self.mostra_mensagem("Tente Novamente. O salário não foi preenchido")
+            self.mostra_mensagem("Tente Novamente. O salário não foi preenchido corretamente")

@@ -1,4 +1,6 @@
 from telas.telaProfessor import TelaProfessor
+from Exception.ProfessorDuplicado import ProfessorDuplicado
+from modelos.professor import Professor
 
 class ControladorProfessor():
     def __init__(self, controlador_sistema):
@@ -6,12 +8,34 @@ class ControladorProfessor():
         self.__tela_professor = TelaProfessor()
         self.__professores = []
         
-    def mostrar_professores_cadastrados(self):
-        pass
+    def listar_professores(self):
+        if not self.__professores:
+            self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
+            return
+        for professor in self.__professores:
+            dados_professor = {
+                'nome': professor.nome,
+                'numero_telefone' : professor.numero_telefone,
+                'email': professor.email,
+                'turno': professor.turno,
+                'salario': professor.salario
+            }
+            self.__tela_professor.mostra_mensagem(dados_professor)
+        
 
     def cadastar_professor(self):
-        dados_professor = self.__tela_professor.pega_dados_professor()
-        pass
+        dados_professor = self.__tela_professor.pega_dados_novo_professor()
+        nome = dados_professor['nome']
+        numero_telefone = dados_professor['numero_telefone']
+        email = dados_professor['email']
+        turno = dados_professor['turno']
+        salario = dados_professor['salario']
+
+        for professor in self.__professores:
+            if professor.nome == nome and professor.email == email:
+                raise ProfessorDuplicado
+        novo_professor = Professor(nome, numero_telefone, email, turno, salario)
+        self.__professores.append(novo_professor)
 
     def alterar_professor(self):
         pass
@@ -36,7 +60,7 @@ class ControladorProfessor():
             1: self.cadastar_professor,
             2: self.remover_professor,
             3: self.alterar_professor,
-            4: self.mostrar_professores_cadastrados,
+            4: self.listar_professores,
             5: self.alterar_professor,
             6: self.relatorio_professores_turno,
             0: self.retornar}
