@@ -63,3 +63,62 @@ class TelaFicha(TelaAbstrata):
                 break
 
         self.__window.close()
+
+    def pega_dados_nova_ficha(self):
+        sg.ChangeLookAndFeel('DarkPurple1')
+
+        numero_treinos = [1,2,3,4,5]
+
+        layout = [
+            [sg.Text("Criar Ficha", font=('Helvetica', 25, 'bold'), justification='center')],
+            [sg.Text('Descrição: ', )],
+            [sg.InputText('', key='descricao')],
+            [sg.Text('Numero de Treinos: ', )],
+            [sg.Combo(numero_treinos, key='numero_treinos', readonly=True)],
+            [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
+        ]
+        self.__window = sg.Window('Sistema BodyLab', layout)
+
+        button, values = self.open()
+        self.close()
+
+        if button == 'Confirmar':
+            descricao = values['descricao']
+            numero_treinos = values['numero_treinos']
+
+            return {
+                'descricao': descricao,
+                'numero_treinos': numero_treinos,
+            }
+
+    def pega_dados_treino(self):
+        layout = [
+            [sg.Text("Criar Treino", font=('Helvetica', 25, 'bold'), justification='center')],
+            [sg.Text('Titulo: ', )],
+            [sg.InputText('', key='titulo')],
+            [sg.Text('exercicio 1: ', )],
+            [sg.InputText('', key='exercicio_1')],
+            [sg.Text('exercicio 2: ', )],
+            [sg.InputText('', key='exercicio_2')],
+            [sg.Text('exercicio 3: ', )],
+            [sg.InputText('', key='exercicio_3')],
+            [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
+        ]
+        
+        self.__window = sg.Window('Sistema BodyLab', layout)
+
+        button, values = self.open()
+        self.close()
+
+        if button == 'Confirmar':
+            titulo = values['titulo']
+            exercicio_1 = values['exercicio_1']
+            exercicio_2 = values['exercicio_2']
+            exercicio_3 = values['exercicio_3']
+
+            return {
+                'titulo' : titulo,
+                'exercicio_1' : exercicio_1,
+                'exercicio_2' : exercicio_2,
+                'exercicio_3' :exercicio_3
+            }
