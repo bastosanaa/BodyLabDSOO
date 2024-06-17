@@ -2,9 +2,12 @@ from Exception.AlunoDuplicado import AlunoDuplicado
 from Exception.NumeroTelefoneInvalidoException import NumeroTelefoneInvalido
 from Exception.NomeNaoEhAlfa import NomeNaoEhAlfa
 from Exception.EmailInvalido import EmailInvalido
+from Exception.CepNaoEhNumero import CepNaoEhNumero
 from telas.telaAluno import TelaAluno
 from modelos.aluno import Aluno
 from modelos.endereco import Endereco
+
+
 class ControladorAluno():
     def __init__(self, controlador_sistema):
         self.__tela_aluno = TelaAluno()
@@ -27,18 +30,22 @@ class ControladorAluno():
             if '@' not in dados_aluno['email']:
                 raise EmailInvalido()
             endereco = Endereco(dados_aluno['rua'], dados_aluno['complemento'], dados_aluno['bairro'], dados_aluno['cidade'], dados_aluno['cep'])
+            if not endereco.cep.isnumeric():
+                raise CepNaoEhNumero
             aluno = Aluno(dados_aluno['nome'], dados_aluno['numero_telefone'], dados_aluno['email'], matricula = None, endereco = endereco)
             self.__alunos.append(aluno)
             self.__tela_aluno.mostra_mensagem("Aluno cadastrado com sucesso")
             return aluno
-        except NomeNaoEhAlfa:
-            self.__tela_aluno.mostra_mensagem("O nome deve conter apenas letras")
-        except NumeroTelefoneInvalido:
-            self.__tela_aluno.mostra_mensagem("Número de telefone inválido")
-        except EmailInvalido:
-            self.__tela_aluno.mostra_mensagem("Email inválido")
-        except AlunoDuplicado:
-            self.__tela_aluno.mostra_mensagem("Aluno já cadastrado")
+        except NomeNaoEhAlfa as e:
+            self.__tela_aluno.mostra_mensagem(str(e))
+        except NumeroTelefoneInvalido as e:
+            self.__tela_aluno.mostra_mensagem(str(e))
+        except EmailInvalido as e:
+            self.__tela_aluno.mostra_mensagem(str(e))
+        except AlunoDuplicado as e:
+            self.__tela_aluno.mostra_mensagem(str(e))
+        except CepNaoEhNumero as e:
+            self.__tela_aluno.mostra_mensagem(str(e))
 
     def aluno_esta_cadastrado(self, nome_aluno):
         for aluno in self.__alunos:
@@ -47,8 +54,8 @@ class ControladorAluno():
         return False
 
     def remover_aluno(self):
-        nome_aluno = self.__tela_aluno.seleciona_aluno()
-        aluno = self.buscar_aluno_por_nome(nome_aluno)
+        nome = self.__tela_aluno.seleciona_aluno()
+        aluno = self.buscar_aluno_por_nome(nome)
         if not aluno:
             self.__tela_aluno.mostra_mensagem("Aluno não encontrado")
         else:
@@ -60,6 +67,29 @@ class ControladorAluno():
             if aluno.nome == nome_aluno:
                 return aluno
         return None
+
+    def alterar_aluno(self):
+        nome_aluno = self.__tela_aluno.seleciona_aluno()
+        aluno = self.buscar_aluno_por_nome(nome_aluno)
+        if not aluno:
+            self.__tela_aluno.mostra_mensagem("Aluno não encontrado")
+        else:
+            dados_aluno = self.__tela_aluno.pega_dados_alterar_aluno()
+            if 'nome' in dados_aluno:
+                if not dados_aluno['nome'].isalpha():
+                    raise NomeNaoEhAlfa()
+                aluno.nome = dados_aluno['nome']
+            if 'numero_telefone' in dados_aluno:
+                if len(dados_aluno['numero_telefone']) != 11 or not dados_aluno['numero_telefone'].isnumeric:
+                    raise NumeroTelefoneInvalido()
+                aluno.numero_telefone = dados_aluno['numero_telefone']
+            if 'email' in dados_aluno:
+                if '@' not in dados_aluno['email']:
+                    raise EmailInvalido()
+                aluno.email = dados_aluno['email']
+            if 'endereco' in dados_aluno:
+                aluno.endereco = dados_aluno['endereco']
+            self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
 
     def listar_alunos(self):
         if not self.__alunos:
@@ -75,7 +105,7 @@ class ControladorAluno():
                 self.__tela_aluno.mostra_aluno(dados_aluno)
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_aluno, 2: self.remover_aluno, 3: self.listar_alunos, 4: self.buscar_aluno_por_nome, 0: self.retornar}
+        lista_opcoes = {1: self.cadastrar_aluno, 2: self.remover_aluno, 3: self.listar_alunos, 4: self.alterar_aluno, 0: self.retornar}
 
         while True:
             try:

@@ -17,6 +17,8 @@ class TelaAluno(TelaAbstrata):
             opcao = 2
         if values['3']:
             opcao = 3
+        if values['4']:
+            opcao = 4
         if values['0'] or button in (None, "Cancelar"):
             opcao = 0
         self.close()
@@ -25,10 +27,11 @@ class TelaAluno(TelaAbstrata):
     def init_opcoes(self):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
-            [sg.Text("Aluno", font=('Helvetica', 25))],
+            [sg.Text("Aluno", font=('Helvetica', 25, 'bold'))],
             [sg.Radio('Cadastrar Aluno', "RD1", key='1')],
             [sg.Radio('Remover Aluno', "RD1", key='2')],
             [sg.Radio('Listar Alunos', "RD1", key='3')],
+            [sg.Radio('Alterar Dado do Aluno', "RD1", key='4')],
             [sg.Radio('Retornar', "RD1", key='0')],
             [sg.Button('Confirmar',button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
@@ -38,6 +41,44 @@ class TelaAluno(TelaAbstrata):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
             [sg.Text("Cadastrar Aluno", font=('Helvetica', 25, 'bold'), justification='center')],
+            [sg.Text('Nome: ', )],
+            [sg.InputText('', key='nome')],
+            [sg.Text('Numero de Telefone: ')],
+            [sg.InputText('', key='numero_telefone')],
+            [sg.Text('E-mail: ')],
+            [sg.InputText('', key='email')],
+            [sg.Text('Rua: ')],
+            [sg.InputText('', key='rua')],
+            [sg.Text('Complemento: ')],
+            [sg.InputText('', key='complemento')],
+            [sg.Text('Bairro: ')],
+            [sg.InputText('', key='bairro')],
+            [sg.Text('Cidade: ')],
+            [sg.InputText('', key='cidade')],
+            [sg.Text('CEP: ')],
+            [sg.InputText('', key='cep')],
+            [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
+        ]
+        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+
+        button, values = self.open()
+        nome = values['nome']
+        numero_telefone = values['numero_telefone']
+        email = values['email']
+        rua = values['rua']
+        complemento = values['complemento']
+        bairro = values['bairro']
+        cidade = values['cidade']
+        cep = values['cep']
+
+        self.close()
+        return {"nome": nome, "numero_telefone": numero_telefone, "email": email, "rua": rua,
+                "complemento": complemento, "bairro": bairro, "cidade": cidade, "cep": cep}
+
+    def pega_dados_alterar_aluno(self):
+        sg.ChangeLookAndFeel('DarkPurple1')
+        layout = [
+            [sg.Text("Alterar Dados do Aluno", font=('Helvetica', 25, 'bold'), justification='center')],
             [sg.Text('Nome: ', )],
             [sg.InputText('', key='nome')],
             [sg.Text('Numero de Telefone: ')],
@@ -120,7 +161,7 @@ class TelaAluno(TelaAbstrata):
 
     def mostra_mensagem(self, msg):
         layout = [
-            [sg.Text(msg)],
+            [sg.Text(msg, font=('Helvetica', 15, 'bold'))],
             [sg.Button('OK')]
         ]
 

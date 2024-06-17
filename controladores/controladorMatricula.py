@@ -1,4 +1,6 @@
+from Exception.AlunoDuplicado import AlunoDuplicado
 from modelos.matricula import Matricula
+from Exception.AlunoNaoCadastrado import AlunoNaoCadastrado
 from telas.telaMatricula import TelaMatricula
 from modelos.plano import Plano
 from modelos.turno import Turno
@@ -15,9 +17,6 @@ class ControladorMatricula:
         self.__planos = [Plano.Silver, Plano.Gold, Plano.Diamond]
         self.__turnos = [Turno.Matutino, Turno.Vespertino, Turno.Noturno]
 
-    @property
-    def controlador_aluno(self):
-        return self.__controlador_aluno
 
     def aluno_esta_matriculado(self, nome_aluno):
         for matricula in self.__matriculas:
@@ -28,33 +27,38 @@ class ControladorMatricula:
     def realizar_matricula(self):
         dados_matricula = self.__tela_matricula.pega_dados_matricula(self.__turnos, self.__planos)
         aluno = dados_matricula['aluno']
-        if not self.__controlador_sistema.controlador_aluno.aluno_esta_cadastrado(aluno):
-            return self.__tela_matricula.mostra_mensagem("Aluno não está cadastrado")
-        if self.aluno_esta_matriculado(aluno):
-            return self.__tela_matricula.mostra_mensagem("Aluno já está matriculado")
-        else:
-            turno = dados_matricula['turno']
-            plano = dados_matricula['plano']
-
-            if plano == "Diamond":
-                plano = Plano.Diamond
-            elif plano == "Gold":
-                plano = Plano.Gold
-            elif plano == "Silver":
-                plano = Plano.Silver
+        try:
+            if not self.__controlador_sistema.controlador_aluno.aluno_esta_cadastrado(aluno):
+                raise AlunoNaoCadastrado()
+            if self.aluno_esta_matriculado(aluno):
+                raise AlunoDuplicado()
             else:
-                self.__tela_matricula.mostra_mensagem("Plano inválido. Por favor, selecione um plano válido.")
-                return
+                turno = dados_matricula['turno']
+                plano = dados_matricula['plano']
 
-            id_matricula = random.randint(1000, 9999)
-            mensalidade = self.definir_mensalidade_de_acordo_com_plano(plano)
-            data_inicio_matricula = datetime.now()
-            data_vencimento_matricula = data_inicio_matricula + timedelta(days=30)
-            data_termino_matricula = data_inicio_matricula + timedelta(days=365)
-            matricula = Matricula(id_matricula, turno, plano, mensalidade, aluno, data_inicio_matricula,
-                                  data_vencimento_matricula, data_termino_matricula)
-            self.__matriculas.append(matricula)
-            self.__tela_matricula.mostra_mensagem(f"Matrícula realizada com sucesso!\nID da matrícula: {id_matricula}")
+                if plano == "Diamond":
+                    plano = Plano.Diamond
+                elif plano == "Gold":
+                    plano = Plano.Gold
+                elif plano == "Silver":
+                    plano = Plano.Silver
+                else:
+                    self.__tela_matricula.mostra_mensagem("Plano inválido. Por favor, selecione um plano válido.")
+                    return
+
+                id_matricula = random.randint(1000, 9999)
+                mensalidade = self.definir_mensalidade_de_acordo_com_plano(plano)
+                data_inicio_matricula = datetime.now()
+                data_vencimento_matricula = data_inicio_matricula + timedelta(days=30)
+                data_termino_matricula = data_inicio_matricula + timedelta(days=365)
+                matricula = Matricula(id_matricula, turno, plano, mensalidade, aluno, data_inicio_matricula,
+                                      data_vencimento_matricula, data_termino_matricula)
+                self.__matriculas.append(matricula)
+                self.__tela_matricula.mostra_mensagem(f"Matrícula realizada com sucesso!\nID da matrícula: {id_matricula}")
+        except AlunoNaoCadastrado as e:
+            self.__tela_matricula.mostra_mensagem(str(e))
+        except AlunoDuplicado as e:
+            self.__tela_matricula.mostra_mensagem(str(e))
 
     def definir_mensalidade_de_acordo_com_plano(self, plano):
         mensalidade = 0.0
