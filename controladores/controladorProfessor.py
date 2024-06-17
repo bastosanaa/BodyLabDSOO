@@ -12,10 +12,27 @@ class ControladorProfessor():
             'vespertino': 0,
             'noturno': 0
         }
-
+        
     @property
     def professores_por_turno(self):
         return self.__professores_por_turno
+
+    def retornar(self):
+        self.__controlador_sistema.abre_tela()
+
+    def abre_tela(self):
+        lista_opcoes = {
+            1: self.cadastar_professor,
+            2: self.remover_professor,
+            3: self.selecionar_professor_a_alterar,
+            4: self.listar_professores,
+            5: self.relatorio_professores_turno,
+            0: self.retornar}
+
+        while True:
+            opcao_escolhida = self.__tela_professor.tela_opcoes()
+            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            funcao_escolhida()
         
     def adicionar_professor_turno(self, turno):
         self.__professores_por_turno[turno] += 1
@@ -114,20 +131,3 @@ class ControladorProfessor():
 
     def relatorio_professores_turno(self):
         self.__tela_professor.mostrar_relatorio_prof_turno(self.__professores_por_turno)
-
-    def retornar(self):
-        self.__controlador_sistema.abre_tela()
-
-    def abre_tela(self):
-        lista_opcoes = {
-            1: self.cadastar_professor,
-            2: self.remover_professor,
-            3: self.selecionar_professor_a_alterar,
-            4: self.listar_professores,
-            5: self.relatorio_professores_turno,
-            0: self.retornar}
-
-        while True:
-            opcao_escolhida = self.__tela_professor.tela_opcoes()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()

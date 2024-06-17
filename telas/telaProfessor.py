@@ -1,5 +1,5 @@
-from telas.telaAbstrata import TelaAbstrata
 import PySimpleGUI as sg
+from telas.telaAbstrata import TelaAbstrata
 from Exception.NumeroTelefoneInvalidoException import NumeroTelefoneInvalido
 from Exception.NomeNaoEhAlfa import NomeNaoEhAlfa
 from Exception.EmailInvalido import EmailInvalido
@@ -202,7 +202,6 @@ class TelaProfessor(TelaAbstrata):
             salario = values['salario']
 
             # Realizando as verificações
-            #ESTA DEIXANDO CRIAR COM OS DADOS ERRADOS
             try:
                 self.verifica_nome(nome)
                 self.verifica_telefone(numero_telefone)

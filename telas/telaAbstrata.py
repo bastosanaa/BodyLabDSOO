@@ -6,3 +6,6 @@ class TelaAbstrata(ABC):
     def tela_opcoes(self):
         pass
     
+    @abstractmethod
+    def init_opcoes(self):
+        pass

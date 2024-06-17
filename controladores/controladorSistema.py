@@ -2,6 +2,7 @@ from telas.telaSistema import TelaSistema
 from controladores.controladorProfessor import ControladorProfessor
 from controladores.controladorAluno import ControladorAluno
 from controladores.controladorMatricula import ControladorMatricula
+from controladores.controladorFicha import ControladorFicha
 
 
 class ControladorSistema():
@@ -10,6 +11,7 @@ class ControladorSistema():
         self.__controlador_professor = ControladorProfessor(self)
         self.__controlador_aluno = ControladorAluno(self)
         self.__controlador_matricula = ControladorMatricula(self)
+        self.__controlador_ficha = ControladorFicha(self)
 
     @property
     def controlador_professor(self):
@@ -23,6 +25,10 @@ class ControladorSistema():
     def controlador_matricula(self):
         return self.__controlador_matricula
     
+    @property
+    def controlador_ficha(self):
+        return self.__controlador_ficha
+    
     def cadastra_professor(self):
         self.__controlador_professor.abre_tela()
     
@@ -33,7 +39,7 @@ class ControladorSistema():
         self.controlador_aluno.abre_tela()
 
     def cadastra_ficha(self):
-        pass
+        self.__controlador_ficha.abre_tela()
     
     def inicializa_sistema(self):
         self.abre_tela()
