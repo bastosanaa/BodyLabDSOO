@@ -1,3 +1,4 @@
+from DAOs.matricula_dao import MatriculaDAO
 from Exception.AlunoDuplicado import AlunoDuplicado
 from modelos.matricula import Matricula
 from Exception.AlunoNaoCadastrado import AlunoNaoCadastrado
@@ -13,13 +14,13 @@ class ControladorMatricula:
     def __init__(self, controlador_sistema):
         self.__tela_matricula = TelaMatricula()
         self.__controlador_sistema = controlador_sistema
-        self.__matriculas = []
+        self.__matriculas_dao = MatriculaDAO()
         self.__planos = [Plano.Silver, Plano.Gold, Plano.Diamond]
         self.__turnos = [Turno.Matutino, Turno.Vespertino, Turno.Noturno]
 
 
     def aluno_esta_matriculado(self, nome_aluno):
-        for matricula in self.__matriculas:
+        for matricula in self.__matriculas_dao.get_all():
             if matricula.aluno == nome_aluno:
                 return True
         return False
@@ -53,7 +54,7 @@ class ControladorMatricula:
                 data_termino_matricula = data_inicio_matricula + timedelta(days=365)
                 matricula = Matricula(id_matricula, turno, plano, mensalidade, aluno, data_inicio_matricula,
                                       data_vencimento_matricula, data_termino_matricula)
-                self.__matriculas.append(matricula)
+                self.__matriculas_dao.add(matricula)
                 self.__tela_matricula.mostra_mensagem(f"Matrícula realizada com sucesso!\nID da matrícula: {id_matricula}")
         except AlunoNaoCadastrado as e:
             self.__tela_matricula.mostra_mensagem(str(e))
@@ -76,16 +77,17 @@ class ControladorMatricula:
         id_matricula_escolhida = self.__tela_matricula.seleciona_id_matricula()
         matricula = self.buscar_matricula_por_id(id_matricula_escolhida)
         if matricula:
-            self.__matriculas.remove(matricula)
+            self.__matriculas_dao.remove(matricula)
             self.__tela_matricula.mostra_mensagem("Matrícula cancelada com sucesso")
         else:
             self.__tela_matricula.mostra_mensagem("Matrícula não encontrada")
 
     def lista_matriculas(self):
-        if not self.__matriculas:
+        matriculas = self.__matriculas_dao.get_all()
+        if not matriculas:
             return self.__tela_matricula.mostra_mensagem("Não há matrículas cadastradas")
         else:
-            for matricula in self.__matriculas:
+            for matricula in matriculas:
                 self.__tela_matricula.lista_de_matricula({
                     'id_matricula': matricula.id_matricula,
                     'aluno': matricula.aluno,
@@ -116,10 +118,7 @@ class ControladorMatricula:
 
 
     def buscar_matricula_por_id(self, id_matricula):
-        for matricula in self.__matriculas:
-            if matricula.id_matricula == id_matricula:
-                return matricula
-        return None
+        return self.__matriculas_dao.get(id_matricula)
 
     def alterar_plano(self, id_matricula):
         matricula = self.buscar_matricula_por_id(id_matricula)
@@ -162,7 +161,7 @@ class ControladorMatricula:
 
     def plano_mais_procurado(self):
         contagem_planos = {}
-        for matricula in self.__matriculas:
+        for matricula in self.__matriculas_dao.get_all():
             if matricula.plano not in contagem_planos:
                 contagem_planos[matricula.plano] = 0
             contagem_planos[matricula.plano] += 1
@@ -178,7 +177,7 @@ class ControladorMatricula:
 
     def turno_mais_procurado(self):
         contagem_turnos = {}
-        for matricula in self.__matriculas:
+        for matricula in self.__matriculas_dao.get_all():
             if matricula.turno not in contagem_turnos:
                 contagem_turnos[matricula.turno] = 0
             contagem_turnos[matricula.turno] += 1

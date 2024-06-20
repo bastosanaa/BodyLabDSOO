@@ -4,18 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="update na entidade aluno">
-      <change afterPath="$PROJECT_DIR$/DAOs/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DAOs/aluno_dao.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DAOs/dao.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DAOs/matricula_dao.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alunos.pkl" afterDir="false" />
+    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="preparando o ambiente para receber o DAO">
+      <change afterPath="$PROJECT_DIR$/matriculas.pkl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exception/NumeroTelefoneInvalidoException.py" beforeDir="false" afterPath="$PROJECT_DIR$/Exception/NumeroTelefoneInvalidoException.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAOs/aluno_dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAOs/aluno_dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAOs/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAOs/dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAOs/matricula_dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAOs/matricula_dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alunos.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/alunos.pkl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controladores/controladorAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorAluno.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modelos/aluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelos/aluno.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telas/telaAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/telas/telaAluno.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telas/telaProfessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/telas/telaProfessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controladores/controladorMatricula.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorMatricula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +130,12 @@
       <workItem from="1718661125665" duration="2721000" />
       <workItem from="1718902469501" duration="2629000" />
       <workItem from="1718915497865" duration="782000" />
-      <workItem from="1718916290554" duration="306000" />
+      <workItem from="1718916290554" duration="467000" />
+      <workItem from="1718921332326" duration="82000" />
+      <workItem from="1718921472321" duration="176000" />
+      <workItem from="1718921718722" duration="209000" />
+      <workItem from="1718921939223" duration="653000" />
+      <workItem from="1718922670989" duration="793000" />
     </task>
     <task id="LOCAL-00001" summary="Sistema de aluno e matricula ok, esperandoa  criacao do DAO">
       <option name="closed" value="true" />
@@ -151,7 +153,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718638089195</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="preparando o ambiente para receber o DAO">
+      <option name="closed" value="true" />
+      <created>1718916646135</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1718916646135</updated>
+    </task>
+    <task id="LOCAL-00004" summary="preparando o ambiente para receber o DAO">
+      <option name="closed" value="true" />
+      <created>1718916656235</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1718916656235</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,9 +189,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Sistema de aluno e matricula ok, esperandoa  criacao do DAO" />
     <MESSAGE value="update na entidade aluno" />
-    <option name="LAST_COMMIT_MESSAGE" value="update na entidade aluno" />
+    <MESSAGE value="preparando o ambiente para receber o DAO" />
+    <option name="LAST_COMMIT_MESSAGE" value="preparando o ambiente para receber o DAO" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BodyLabDSOO$main.coverage" NAME="main Coverage Results" MODIFIED="1718916568490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BodyLabDSOO$main.coverage" NAME="main Coverage Results" MODIFIED="1718923463275" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

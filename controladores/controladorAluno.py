@@ -1,3 +1,4 @@
+from DAOs.aluno_dao import AlunoDAO
 from Exception.AlunoDuplicado import AlunoDuplicado
 from Exception.NumeroTelefoneInvalidoException import NumeroInvalido
 from Exception.NomeNaoEhAlfa import NomeNaoEhAlfa
@@ -12,7 +13,7 @@ class ControladorAluno():
     def __init__(self, controlador_sistema):
         self.__tela_aluno = TelaAluno()
         self.__controlador_sistema = controlador_sistema
-        self.__alunos = []
+        self.__aluno_dao = AlunoDAO()
         self.__matricula = None
 
 
@@ -36,7 +37,7 @@ class ControladorAluno():
             if not endereco.cep.isnumeric():
                 raise CepNaoEhNumero
             aluno = Aluno(dados_aluno['cpf'], dados_aluno['nome'], dados_aluno['numero_telefone'], dados_aluno['email'], matricula = None, endereco = endereco)
-            self.__alunos.append(aluno)
+            self.__aluno_dao.add(aluno)
             self.__tela_aluno.mostra_mensagem("Aluno cadastrado com sucesso")
             return aluno
         except NomeNaoEhAlfa as e:
@@ -51,25 +52,22 @@ class ControladorAluno():
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def aluno_esta_cadastrado(self, nome_aluno):
-        for aluno in self.__alunos:
+        for aluno in self.__aluno_dao.get_all():
             if aluno.nome == nome_aluno:
                 return True
         return False
 
     def remover_aluno(self):
         cpf = self.__tela_aluno.seleciona_aluno()
-        aluno = self.buscar_aluno_por_cpf(cpf)
+        aluno = self.__aluno_dao.get(cpf)
         if not aluno:
             self.__tela_aluno.mostra_mensagem("Aluno não encontrado")
         else:
-            self.__alunos.remove(aluno)
+            self.__aluno_dao.remove(aluno)
             self.__tela_aluno.mostra_mensagem("Aluno removido com sucesso")
 
     def buscar_aluno_por_cpf(self, cpf_aluno):
-        for aluno in self.__alunos:
-            if aluno.cpf == cpf_aluno:
-                return aluno
-        return None
+       return self.__aluno_dao.get(cpf_aluno)
 
     def alterar_aluno(self):
         cpf_aluno = self.__tela_aluno.seleciona_aluno()
@@ -93,6 +91,7 @@ class ControladorAluno():
                     aluno.email = dados_aluno['email']
                 if 'endereco' in dados_aluno:
                     aluno.endereco = dados_aluno['endereco']
+                self.__aluno_dao.add(aluno)  # Update the student in the DAO
                 self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
         except NomeNaoEhAlfa as e:
             self.__tela_aluno.mostra_mensagem(str(e))
@@ -102,10 +101,11 @@ class ControladorAluno():
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def listar_alunos(self):
-        if not self.__alunos:
+        alunos = self.__aluno_dao.get_all()
+        if not alunos:
             self.__tela_aluno.mostra_mensagem("Nenhum aluno cadastrado")
         else:
-            for aluno in self.__alunos:
+            for aluno in alunos:
                 dados_aluno = {
                     'cpf': aluno.cpf,
                     'nome': aluno.nome,
