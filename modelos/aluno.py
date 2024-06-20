@@ -5,13 +5,22 @@ from modelos.endereco import  Endereco
 
 
 class Aluno(Pessoa):
-    def __init__(self, nome: str, numero_telefone: int,
+    def __init__(self, cpf: int , nome: str, numero_telefone: int,
                  email: str, matricula: Matricula, endereco: Endereco ):
         super().__init__(nome, numero_telefone, email)
         if isinstance(matricula, Matricula):
             self.__matricula = matricula
         self.__ficha = ''
         self.__endereco = endereco
+        self.__cpf = cpf
+
+    @property
+    def cpf(self):
+        return self.__cpf
+
+    @cpf.setter
+    def cpf(self, cpf):
+        self.__cpf = cpf
 
     @property
     def endereco(self):

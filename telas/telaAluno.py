@@ -41,6 +41,8 @@ class TelaAluno(TelaAbstrata):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
             [sg.Text("Cadastrar Aluno", font=('Helvetica', 25, 'bold'), justification='center')],
+            [sg.Text("CPF: ")],
+            [sg.InputText('', key='cpf')],
             [sg.Text('Nome: ', )],
             [sg.InputText('', key='nome')],
             [sg.Text('Numero de Telefone: ')],
@@ -57,29 +59,31 @@ class TelaAluno(TelaAbstrata):
             [sg.InputText('', key='cidade')],
             [sg.Text('CEP: ')],
             [sg.InputText('', key='cep')],
+            [sg.Radio('Retornar', "RD1", key='0')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
 
         button, values = self.open()
-        nome = values['nome']
-        numero_telefone = values['numero_telefone']
-        email = values['email']
+        cpf = values['cpf']
         rua = values['rua']
         complemento = values['complemento']
         bairro = values['bairro']
         cidade = values['cidade']
         cep = values['cep']
+        nome = values['nome']
+        numero_telefone = values['numero_telefone']
+        email = values['email']
 
         self.close()
-        return {"nome": nome, "numero_telefone": numero_telefone, "email": email, "rua": rua,
-                "complemento": complemento, "bairro": bairro, "cidade": cidade, "cep": cep}
+        return {"cpf": cpf, "nome": nome, "numero_telefone": numero_telefone, "email": email,
+                "rua": rua, "complemento": complemento, "bairro": bairro, "cidade": cidade, "cep": cep}
 
     def pega_dados_alterar_aluno(self):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
             [sg.Text("Alterar Dados do Aluno", font=('Helvetica', 25, 'bold'), justification='center')],
-            [sg.Text('Nome: ', )],
+            [sg.Text('Nome: ')],
             [sg.InputText('', key='nome')],
             [sg.Text('Numero de Telefone: ')],
             [sg.InputText('', key='numero_telefone')],
@@ -95,6 +99,7 @@ class TelaAluno(TelaAbstrata):
             [sg.InputText('', key='cidade')],
             [sg.Text('CEP: ')],
             [sg.InputText('', key='cep')],
+            [sg.Radio('Retornar', "RD1", key='0')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
@@ -103,18 +108,15 @@ class TelaAluno(TelaAbstrata):
         nome = values['nome']
         numero_telefone = values['numero_telefone']
         email = values['email']
-        rua = values['rua']
-        complemento = values['complemento']
-        bairro = values['bairro']
-        cidade = values['cidade']
-        cep = values['cep']
+        endereco = Endereco(values['rua'], values['complemento'], values['bairro'], values['cidade'], values['cep'])
 
         self.close()
-        return {"nome": nome, "numero_telefone": numero_telefone, "email": email, "rua": rua,
-                "complemento": complemento, "bairro": bairro, "cidade": cidade, "cep": cep}
+        return {"nome": nome, "numero_telefone": numero_telefone, "email": email, "endereco": endereco},
+
 
     def mostra_aluno(self, dados_aluno):
         string_aluno = ""
+        string_aluno += "CPF: " + dados_aluno["cpf"] + '\n'
         string_aluno += "Nome: " + dados_aluno["nome"] + '\n'
         string_aluno += "Telefone: " + str(dados_aluno["numero_telefone"]) + '\n'
         string_aluno += "E-mail: " + str(dados_aluno["email"]) + '\n'
@@ -123,6 +125,7 @@ class TelaAluno(TelaAbstrata):
 
         layout = [
             [sg.Text('-------- DADOS DO ALUNO ----------', font=("Helvetica", 15, 'bold'))],
+            [sg.Text("CPF: ", font=("Helvetica", 10, 'bold')), sg.Text(dados_aluno["cpf"])],
             [sg.Text("Nome: ", font=("Helvetica", 10, 'bold')), sg.Text(dados_aluno["nome"])],
             [sg.Text("Telefone: ", font=("Helvetica", 10, 'bold')), sg.Text(str(dados_aluno["numero_telefone"]))],
             [sg.Text("E-mail: ", font=("Helvetica", 10, 'bold')), sg.Text(str(dados_aluno["email"]))],
@@ -140,17 +143,18 @@ class TelaAluno(TelaAbstrata):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
             [sg.Text('seleciona aluno', font=("Helvica", 20, 'bold'))],
-            [sg.Text('Digite o nome do aluno:', font=("Helvica", 15))],
-            [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='nome')],
+            [sg.Text('Digite o cpf do aluno:', font=("Helvica", 15))],
+            [sg.Text('cpf:', size=(15, 1)), sg.InputText('', key='cpf')],
+            [sg.Radio('Retornar', "RD1", key='0')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
 
 
         button, values = self.open()
-        nome = values['nome']
+        cpf = values['cpf']
         self.close()
-        return nome
+        return cpf
 
     def open(self):
         button, values = self.__window.Read()

@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 from telas.telaAbstrata import TelaAbstrata
-from Exception.NumeroTelefoneInvalidoException import NumeroTelefoneInvalido
+from Exception.NumeroTelefoneInvalidoException import NumeroInvalido
 from Exception.NomeNaoEhAlfa import NomeNaoEhAlfa
 from Exception.EmailInvalido import EmailInvalido
 from Exception.SalarioInválido import SalarioInvalido
@@ -211,7 +211,7 @@ class TelaProfessor(TelaAbstrata):
             except NomeNaoEhAlfa:
                 self.mostra_mensagem("Tente Novamente. Nome inválido")
                 return
-            except NumeroTelefoneInvalido:
+            except NumeroInvalido:
                 self.mostra_mensagem("Tente Novamente. Número de telefone inválido (utilize apenas números)")
                 return
             except EmailInvalido:
@@ -294,7 +294,7 @@ class TelaProfessor(TelaAbstrata):
     def verifica_telefone(self, numero_telefone):
             if numero_telefone:
                 if len(numero_telefone) < 9 or len(numero_telefone) > 12:
-                    raise NumeroTelefoneInvalido
+                    raise NumeroInvalido
                 numero_telefone = int(numero_telefone)
                 return
             raise ValueError
