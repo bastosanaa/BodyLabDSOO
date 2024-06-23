@@ -1,5 +1,6 @@
 from telas.telaAbstrata import TelaAbstrata
 import PySimpleGUI as sg
+import json
 
 
 class TelaMatricula(TelaAbstrata):
@@ -36,7 +37,7 @@ class TelaMatricula(TelaAbstrata):
     def init_opcoes(self):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
-            [sg.Text("Matriculas", font=('Fira Code', 25))],
+            [sg.Text("Matriculas", font=('Helvetica', 25, 'bold'))],
             [sg.Radio('Realizar Matrícula', "RD1", key='1')],
             [sg.Radio('Cancelar Matrícula', "RD1", key='2')],
             [sg.Radio('Listar Matrículas', "RD1", key='3')],
@@ -54,8 +55,8 @@ class TelaMatricula(TelaAbstrata):
         sg.theme('DarkPurple1')
         layout = [
             [sg.Text("Realizar Matricula", font=('Helvetica', 25, 'bold'))],
-            [sg.Text('Insira o nome do aluno: '), sg.InputText('', key='aluno')],
-            [sg.Text('Selecione o turno:'), sg.Combo(self.__turnos, key='turno'), sg.Text('Selecione o plano:'), sg.Combo(self.__planos, key='plano')],
+            [sg.Text('Insira o nome do aluno: ', font=('Helvetica', 12)), sg.InputText('', key='aluno')],
+            [sg.Text('Selecione o turno:', font=('Helvetica', 12)), sg.Combo(self.__turnos, key='turno'), sg.Text('Selecione o plano:', font=('Helvetica', 12)), sg.Combo(self.__planos, key='plano')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
@@ -84,33 +85,57 @@ class TelaMatricula(TelaAbstrata):
         self.close()
         return id_matricula
 
-    def gerar_string_matricula(self, dados_matricula):
-        string_matricula = ''
-        string_matricula += "ID: " + str(dados_matricula["id_matricula"]) + '\n'
-        string_matricula += "Aluno: " + dados_matricula["aluno"] + '\n'
-        string_matricula += "Turno: " + dados_matricula["turno"] + '\n'
-        string_matricula += "Plano: " + dados_matricula["plano"] + '\n'
-        string_matricula += "Mensalidade: " + str(dados_matricula["mensalidade"]) + '\n'
-        string_matricula += "Data de Início: " + str(dados_matricula["data_inicio_matricula"]) + '\n'
-        string_matricula += "Data de Vencimento: " + str(dados_matricula["data_vencimento_matricula"]) + '\n'
-        string_matricula += "Data de Término: " + str(dados_matricula["data_termino_matricula"]) + '\n'
-        return string_matricula
 
-    def lista_de_matricula(self, dados_matricula):
-        string_matricula = self.gerar_string_matricula(dados_matricula)
+    def lista_de_matricula(self, dados_matriculas):
+        lista_matriculas = [[
+            id_matricula,
+            dados["aluno"],
+            dados["turno"],
+            dados["plano"],
+            dados["mensalidade"],
+            dados["data_inicio_matricula"],
+            dados["data_vencimento_matricula"],
+            dados["data_termino_matricula"]
+        ] for id_matricula, dados in dados_matriculas.items()]
+
+        headers = ["ID", "Aluno", "Turno", "Plano", "Mensalidade", "Data de Início", "Data de Vencimento",
+                   "Data de Término"]
+
         layout = [
-            [sg.Text('LISTA DE MATRICULAS', font=('Helvetica', 15, 'bold'))],
-            [sg.Text(string_matricula)],
+            [sg.Column([[sg.Text('Matriculas Cadastradas', justification='center', font=('Helvetica', 20, 'bold'))]],
+                       expand_x=True)],
+            [sg.Table(values=lista_matriculas, headings=headers, display_row_numbers=False, auto_size_columns=True,
+                      num_rows=min(25, len(lista_matriculas)))],
             [sg.Button('OK', button_color=('white', 'green'))]
         ]
+
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
 
         button, values = self.open()
         self.close()
 
     def mostra_matricula(self, dados_matricula):
-        string_matricula = self.gerar_string_matricula(dados_matricula)
-        sg.Popup('MATRICULA', string_matricula)
+        layout = [
+            [sg.Text('DADOS DA MATRICULA', font=("Helvetica", 15, 'bold'))],
+            [sg.Text("ID: ", font=("Helvetica", 10, 'bold')), sg.Text(str(dados_matricula["id_matricula"]))],
+            [sg.Text("Aluno: ", font=("Helvetica", 10, 'bold')), sg.Text(dados_matricula["aluno"])],
+            [sg.Text("Turno: ", font=("Helvetica", 10, 'bold')), sg.Text(dados_matricula["turno"])],
+            [sg.Text("Plano: ", font=("Helvetica", 10, 'bold')), sg.Text(dados_matricula["plano"])],
+            [sg.Text("Mensalidade: ", font=("Helvetica", 10, 'bold')), sg.Text(str(dados_matricula["mensalidade"]))],
+            [sg.Text("Data de Início: ", font=("Helvetica", 10, 'bold')),
+             sg.Text(str(dados_matricula["data_inicio_matricula"]))],
+            [sg.Text("Data de Vencimento: ", font=("Helvetica", 10, 'bold')),
+             sg.Text(str(dados_matricula["data_vencimento_matricula"]))],
+            [sg.Text("Data de Término: ", font=("Helvetica", 10, 'bold')),
+             sg.Text(str(dados_matricula["data_termino_matricula"]))],
+            [sg.Button('OK', button_color=('white', 'green'))]
+        ]
+
+        self.__window = sg.Window('DADOS DA MATRICULA', layout)
+
+        button, values = self.open()
+
+        self.close()
 
     def pega_dados_plano(self):
         layout = [

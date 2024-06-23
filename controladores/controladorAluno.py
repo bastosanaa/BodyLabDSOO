@@ -105,6 +105,7 @@ class ControladorAluno():
         if not alunos:
             self.__tela_aluno.mostra_mensagem("Nenhum aluno cadastrado")
         else:
+            dados_alunos = []
             for aluno in alunos:
                 dados_aluno = {
                     'cpf': aluno.cpf,
@@ -113,7 +114,8 @@ class ControladorAluno():
                     'email': aluno.email,
                     'endereco': aluno.endereco
                 }
-                self.__tela_aluno.mostra_aluno(dados_aluno)
+                dados_alunos.append(dados_aluno)
+            self.__tela_aluno.lista_de_alunos(dados_alunos)
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastrar_aluno, 2: self.remover_aluno, 3: self.listar_alunos, 4: self.alterar_aluno, 0: self.retornar}

@@ -5,7 +5,7 @@ class DAO(ABC):
     @abstractmethod
     def __init__(self, datasource=''):
         self.__datasource = datasource
-        self.__cache = {} #é aqui que vai ficar a lista que estava no controlador. Nesse exemplo estamos usando um dicionario
+        self.__cache = {}
         try:
             self.__load()
         except FileNotFoundError:
@@ -21,33 +21,33 @@ class DAO(ABC):
         except EOFError:
             self.__cache = {}
 
-    #esse método precisa chamar o self.__dump()
     def add(self, key, obj):
         self.__cache[key] = obj
-        self.__dump()  #atualiza o arquivo depois de add novo amigo
+        self.__dump()
 
-    #cuidado: esse update só funciona se o objeto com essa chave já existe
     def update(self, key, obj):
         try:
             if(self.__cache[key] != None):
-                self.__cache[key] = obj #atualiza a entrada
-                self.__dump()  #atualiza o arquivo
+                self.__cache[key] = obj
+                self.__dump()
         except KeyError:
-            pass  # implementar aqui o tratamento da exceção
+            self.__cache[key] = obj
+            self.__dump()
 
     def get(self, key):
         try:
             return self.__cache[key]
         except KeyError:
-            pass #implementar aqui o tratamento da exceção
+            return None
 
-    # esse método precisa chamar o self.__dump()
     def remove(self, key):
         try:
             self.__cache.pop(key)
-            self.__dump() #atualiza o arquivo depois de remover um objeto
+            self.__dump()
+            return True
         except KeyError:
-            pass #implementar aqui o tratamento da exceção
+            return False
+
 
     def get_all(self):
         return self.__cache.values()

@@ -113,30 +113,29 @@ class TelaAluno(TelaAbstrata):
         self.close()
         return {"nome": nome, "numero_telefone": numero_telefone, "email": email, "endereco": endereco},
 
+    def lista_de_alunos(self, dados_alunos):
+        lista_alunos = [[
+            dados["cpf"],
+            dados["nome"],
+            dados["numero_telefone"],
+            dados["email"],
+            f"{dados['endereco'].rua}, {dados['endereco'].complemento}, {dados['endereco'].bairro}, {dados['endereco'].cidade}, {dados['endereco'].cep}"
+        ] for dados in dados_alunos]
 
-    def mostra_aluno(self, dados_aluno):
-        string_aluno = ""
-        string_aluno += "CPF: " + dados_aluno["cpf"] + '\n'
-        string_aluno += "Nome: " + dados_aluno["nome"] + '\n'
-        string_aluno += "Telefone: " + str(dados_aluno["numero_telefone"]) + '\n'
-        string_aluno += "E-mail: " + str(dados_aluno["email"]) + '\n'
-        endereco = dados_aluno["endereco"]
-        string_aluno += "Endereço: Rua " + endereco.rua + ', ' + endereco.complemento + ', ' + endereco.bairro + ', ' + endereco.cidade + ', ' + endereco.cep + '\n'
+        headers = ["CPF", "Nome", "Telefone", "E-mail", "Endereço"]
 
         layout = [
-            [sg.Text('-------- DADOS DO ALUNO ----------', font=("Helvetica", 15, 'bold'))],
-            [sg.Text("CPF: ", font=("Helvetica", 10, 'bold')), sg.Text(dados_aluno["cpf"])],
-            [sg.Text("Nome: ", font=("Helvetica", 10, 'bold')), sg.Text(dados_aluno["nome"])],
-            [sg.Text("Telefone: ", font=("Helvetica", 10, 'bold')), sg.Text(str(dados_aluno["numero_telefone"]))],
-            [sg.Text("E-mail: ", font=("Helvetica", 10, 'bold')), sg.Text(str(dados_aluno["email"]))],
-            [sg.Text("Endereço: ", font=("Helvetica", 10, 'bold')), sg.Text("Rua " + endereco.rua + ', ' + endereco.complemento + ', ' + endereco.bairro + ', ' + endereco.cidade + ', ' + endereco.cep)],
+            [sg.Column([[sg.Text('Lista de Alunos da BodyLab', justification='center', font=('Helvetica', 20, 'bold'))]],
+                       expand_x=True)],
+            [sg.Table(values=lista_alunos, headings=headers, display_row_numbers=False, auto_size_columns=True,
+                      font=('Helvetica', 12),
+                      size=(70, 40), num_rows=min(25, len(lista_alunos)), col_widths=[15, 20, 15, 20, 50])],
             [sg.Button('OK', button_color=('white', 'green'))]
         ]
 
-        self.__window = sg.Window('DADOS DO ALUNO', layout)
+        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
 
         button, values = self.open()
-
         self.close()
 
     def seleciona_aluno(self):

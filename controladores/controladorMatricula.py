@@ -88,18 +88,21 @@ class ControladorMatricula:
     def lista_matriculas(self):
         matriculas = self.__matriculas_dao.get_all()
         if not matriculas:
-            return self.__tela_matricula.mostra_mensagem("Não há matrículas cadastradas")
+            self.__tela_matricula.mostra_mensagem("Não há matrículas cadastradas")
         else:
+            dados_matriculas = {}
             for matricula in matriculas:
-                self.__tela_matricula.lista_de_matricula({
-                    'id_matricula': matricula.id_matricula,
+                dados_matricula = {
                     'aluno': matricula.aluno,
                     'turno': matricula.turno,
                     'plano': matricula.plano.name,
                     'mensalidade': matricula.mensalidade,
                     'data_inicio_matricula': matricula.data_inicio_matricula,
                     'data_vencimento_matricula': matricula.data_vencimento_matricula,
-                    'data_termino_matricula': matricula.data_termino_matricula})
+                    'data_termino_matricula': matricula.data_termino_matricula
+                }
+                dados_matriculas[matricula.id_matricula] = dados_matricula
+            self.__tela_matricula.lista_de_matricula(dados_matriculas)
 
     def vizualizar_matricula_especifica(self):
         id_matricula = self.__tela_matricula.seleciona_id_matricula()
