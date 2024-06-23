@@ -88,10 +88,19 @@ class TelaFicha(TelaAbstrata):
             descricao = values['descricao']
             numero_treinos = values['numero_treinos']
 
-            return {
-                'descricao': descricao,
-                'numero_treinos': numero_treinos,
-            }
+            if self.verifica_se_string(descricao):
+                return {
+                    'descricao': descricao,
+                    'numero_treinos': numero_treinos,
+                }
+            self.mostra_mensagem("Tente Novamente. Descrição inválida")
+            return None
+
+    def verifica_se_string(self, entrada):
+        entrada.replace('', ',')
+        if entrada.isalpha():
+            return True
+        return None
 
     def pega_dados_treino(self):
 
@@ -119,10 +128,14 @@ class TelaFicha(TelaAbstrata):
         if button == 'Confirmar':
             treino = values['treino']
 
-            return {
-                "treino": treino
-            }
-        
+            if treino:
+
+                return {
+                    "treino": treino
+                }
+            else:
+                self.mostra_mensagem("Por favor preencha todos os campos")
+            
     def mostra_ficha(self, dados_ficha, numero_ficha, total_fichas):
         sg.ChangeLookAndFeel('DarkPurple1')
 
@@ -145,23 +158,31 @@ class TelaFicha(TelaAbstrata):
         self.__window.close()
 
     def pega_dados_remover_ficha(self):
-        sg.ChangeLookAndFeel('DarkPurple1')
+            sg.ChangeLookAndFeel('DarkPurple1')
 
-        layout = [
-        [sg.Text("insira o ID da ficha a ser removida", font=('Helvetica', 25, 'bold'), justification='center')],
-        [sg.Text('ID: ', )],
-        [sg.InputText('', key='id_ficha')],
-        [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
-        ]
+            layout = [
+            [sg.Text("insira o ID da ficha a ser removida", font=('Helvetica', 25, 'bold'), justification='center')],
+            [sg.Text('ID: ', )],
+            [sg.InputText('', key='id_ficha')],
+            [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
+            ]
 
-        self.__window = sg.Window('Sistema BodyLab', layout)
+            self.__window = sg.Window('Sistema BodyLab', layout)
 
-        button, values = self.open()
-        self.close()
+            button, values = self.open()
+            self.close()
 
-        if button == 'Confirmar':
-            id_ficha = values['id_ficha']
+            if button == 'Confirmar':
+                id_ficha = values['id_ficha']
 
-            return {
+            try:
+                id_ficha = int(id_ficha)
+                return {
                     "id_ficha": id_ficha,
                 }
+            except ValueError:
+                self.mostra_mensagem('Tente novamente. ID inválido.')
+            
+
+
+            

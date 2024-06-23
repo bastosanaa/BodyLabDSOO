@@ -35,6 +35,8 @@ class ControladorFicha:
 
             for _ in range(n_treinos):
                 novo_treino = self.criar_treino()
+                if not novo_treino:
+                    raise ValueError
                 treinos.append(novo_treino)
 
             nova_ficha = Ficha(id_ficha,descricao, n_treinos, treinos)
@@ -43,17 +45,18 @@ class ControladorFicha:
             self.__tela_ficha.mostra_mensagem(f'Ficha {id_ficha} criada com sucesso!')
         except TypeError:
             self.__tela_ficha.mostra_mensagem("Operação Cancelada.")
+        except ValueError:
+            self.__tela_ficha.mostra_mensagem("Por favor preencha todos os campos.")
 
 
     def criar_treino(self):
+            treinos = [treino for treino in Treino]
+            print(treinos)
 
-        treinos = [treino for treino in Treino]
-        print(treinos)
-
-        dados_treino = self.__tela_ficha.pega_dados_treino()
-        titulo_treino = dados_treino['treino']
-        
-        return titulo_treino
+            dados_treino = self.__tela_ficha.pega_dados_treino()
+            titulo_treino = dados_treino['treino']
+            
+            return titulo_treino
 
     def remover_ficha(self):
         #pegar id na tela
@@ -73,7 +76,9 @@ class ControladorFicha:
             self.__tela_ficha.mostra_mensagem(f'Nenhuma ficha de ID: {id} encontrada')
             
         except ValueError:
-            self.__tela_ficha.mostra_mensagem('Operação cancelada. ID inválido')
+            self.__tela_ficha.mostra_mensagem('Operação cancelada.')
+        except TypeError:
+            self.__tela_ficha.mostra_mensagem("Operação Cancelada.")
 
 
     def listar_fichas(self):
