@@ -57,17 +57,24 @@ class ControladorFicha:
 
     def remover_ficha(self):
         #pegar id na tela
-        dados_ficha = self.__tela_ficha.pega_dados_remover_ficha()
-        id = int(dados_ficha['id_ficha'])
-        print(type(id))
-        if not self.__fichas:
-            self.__tela_ficha.mostra_mensagem("Nenhuma ficha cadastrada no sistema")
-            return
-        for ficha in self.__fichas:
-            print(type(ficha.id_ficha))
-            if ficha.id_ficha == id:
-                self.__fichas.remove(ficha)
-                self.__tela_ficha.mostra_mensagem(f'Ficha {id} removida com sucesso')
+        try:
+            if not self.__fichas:
+                self.__tela_ficha.mostra_mensagem("Nenhuma ficha cadastrada no sistema")
+                return
+            dados_ficha = self.__tela_ficha.pega_dados_remover_ficha()
+            id = int(dados_ficha['id_ficha'])
+            print(type(id))
+            for ficha in self.__fichas:
+                print(type(ficha.id_ficha))
+                if ficha.id_ficha == id:
+                    self.__fichas.remove(ficha)
+                    self.__tela_ficha.mostra_mensagem(f'Ficha {id} removida com sucesso')
+                    return
+            self.__tela_ficha.mostra_mensagem(f'Nenhuma ficha de ID: {id} encontrada')
+            
+        except ValueError:
+            self.__tela_ficha.mostra_mensagem('Operação cancelada. ID inválido')
+
 
     def listar_fichas(self):
         if not self.__fichas:
