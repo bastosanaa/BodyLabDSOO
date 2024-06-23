@@ -1,3 +1,4 @@
+import os
 import pickle
 from abc import ABC, abstractmethod
 
@@ -15,7 +16,13 @@ class DAO(ABC):
         pickle.dump(self.__cache, open(self.__datasource, 'wb'))
 
     def __load(self):
-        self.__cache = pickle.load(open(self.__datasource,'rb'))
+        if os.path.exists(self.__datasource):
+            try:
+                self.__cache = pickle.load(open(self.__datasource, 'rb'))
+            except EOFError:
+                self.__cache = {}
+        else:
+            self.__cache = {}
 
     def add(self, key, obj):
         self.__cache[key] = obj

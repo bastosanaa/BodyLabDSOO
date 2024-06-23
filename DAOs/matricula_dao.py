@@ -1,6 +1,6 @@
 from DAOs.dao import DAO
 from modelos.matricula import Matricula
-import pickle
+
 class MatriculaDAO(DAO):
     def __init__(self):
         super().__init__('matriculas.pkl')

@@ -13,9 +13,8 @@ class ControladorAluno():
     def __init__(self, controlador_sistema):
         self.__tela_aluno = TelaAluno()
         self.__controlador_sistema = controlador_sistema
-        self.__aluno_dao = AlunoDAO()
+        self.__alunos_dao = AlunoDAO()
         self.__matricula = None
-
 
     def cadastrar_aluno(self):
         try:
@@ -33,41 +32,38 @@ class ControladorAluno():
                raise NumeroInvalido()
             if '@' not in dados_aluno['email']:
                 raise EmailInvalido()
-            endereco = Endereco(dados_aluno['rua'], dados_aluno['complemento'], dados_aluno['bairro'], dados_aluno['cidade'], dados_aluno['cep'])
+            endereco = Endereco(dados_aluno['rua'], dados_aluno['complemento'], dados_aluno['bairro'],
+                                dados_aluno['cidade'], dados_aluno['cep'])
             if not endereco.cep.isnumeric():
                 raise CepNaoEhNumero
-            aluno = Aluno(dados_aluno['cpf'], dados_aluno['nome'], dados_aluno['numero_telefone'], dados_aluno['email'], matricula = None, endereco = endereco)
-            self.__aluno_dao.add(aluno)
+            aluno = Aluno(dados_aluno['cpf'], dados_aluno['nome'], dados_aluno['numero_telefone'],
+                          dados_aluno['email'], matricula = None, endereco = endereco)
+            self.__alunos_dao.add(aluno)
             self.__tela_aluno.mostra_mensagem("Aluno cadastrado com sucesso")
             return aluno
-        except NomeNaoEhAlfa as e:
-            self.__tela_aluno.mostra_mensagem(str(e))
-        except NumeroInvalido as e:
-            self.__tela_aluno.mostra_mensagem(str(e))
-        except EmailInvalido as e:
-            self.__tela_aluno.mostra_mensagem(str(e))
-        except AlunoDuplicado as e:
-            self.__tela_aluno.mostra_mensagem(str(e))
-        except CepNaoEhNumero as e:
+        except (NomeNaoEhAlfa, NumeroInvalido, EmailInvalido, AlunoDuplicado, CepNaoEhNumero)  as e:
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def aluno_esta_cadastrado(self, nome_aluno):
-        for aluno in self.__aluno_dao.get_all():
+        for aluno in self.__alunos_dao.get_all():
             if aluno.nome == nome_aluno:
                 return True
         return False
 
     def remover_aluno(self):
-        cpf = self.__tela_aluno.seleciona_aluno()
-        aluno = self.__aluno_dao.get(cpf)
+        try:
+            cpf = self.__tela_aluno.seleciona_aluno()
+        except ValueError:
+            self.__tela_aluno.mostra_mensagem("CPF inválido. Por favor, insira um número válido.")
+            return
+        aluno = self.__alunos_dao.get(cpf)
         if not aluno:
             self.__tela_aluno.mostra_mensagem("Aluno não encontrado")
         else:
-            self.__aluno_dao.remove(aluno)
+            self.__alunos_dao.remove(cpf)
             self.__tela_aluno.mostra_mensagem("Aluno removido com sucesso")
-
     def buscar_aluno_por_cpf(self, cpf_aluno):
-       return self.__aluno_dao.get(cpf_aluno)
+       return self.__alunos_dao.get(cpf_aluno)
 
     def alterar_aluno(self):
         cpf_aluno = self.__tela_aluno.seleciona_aluno()
@@ -91,17 +87,13 @@ class ControladorAluno():
                     aluno.email = dados_aluno['email']
                 if 'endereco' in dados_aluno:
                     aluno.endereco = dados_aluno['endereco']
-                self.__aluno_dao.update(aluno)
+                self.__alunos_dao.update(aluno)
                 self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
-        except NomeNaoEhAlfa as e:
-            self.__tela_aluno.mostra_mensagem(str(e))
-        except NumeroInvalido as e:
-            self.__tela_aluno.mostra_mensagem(str(e))
-        except EmailInvalido as e:
+        except (NomeNaoEhAlfa, NumeroInvalido, EmailInvalido) as e:
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def listar_alunos(self):
-        alunos = self.__aluno_dao.get_all()
+        alunos = self.__alunos_dao.get_all()
         if not alunos:
             self.__tela_aluno.mostra_mensagem("Nenhum aluno cadastrado")
         else:
