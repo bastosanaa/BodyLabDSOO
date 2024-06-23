@@ -17,6 +17,7 @@ class TelaFicha(TelaAbstrata):
         "1" : 1,
         "2" : 2,
         "3" : 3,
+        "4" : 4
         }
 
         if button in (None, "Cancelar"):
@@ -37,6 +38,7 @@ class TelaFicha(TelaAbstrata):
             [sg.Radio('Criar Ficha', "RD1", key='1')],
             [sg.Radio('Remover Ficha', "RD1", key='2')],
             [sg.Radio('Listar Fichas', "RD1", key='3')],
+            [sg.Radio('Mostrar Ficha por ID', "RD1", key='4')],
             [sg.Radio('Retornar', "RD1", key='0')],
             [sg.Button('Confirmar',button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
@@ -97,7 +99,8 @@ class TelaFicha(TelaAbstrata):
             return None
 
     def verifica_se_string(self, entrada):
-        entrada.replace('', ',')
+        #corrigir metodo
+        entrada = entrada.replace(' ', '')
         if entrada.isalpha():
             return True
         return None
@@ -136,7 +139,7 @@ class TelaFicha(TelaAbstrata):
             else:
                 self.mostra_mensagem("Por favor preencha todos os campos")
             
-    def mostra_ficha(self, dados_ficha, numero_ficha, total_fichas):
+    def mostra_ficha_listagem(self, dados_ficha, numero_ficha, total_fichas):
         sg.ChangeLookAndFeel('DarkPurple1')
 
         layout = [
@@ -144,7 +147,8 @@ class TelaFicha(TelaAbstrata):
         [sg.Text(f"ID: {dados_ficha['id_ficha']}")],
         [sg.Text(f"Descrição: {dados_ficha['descricao']}")],
         [sg.Text(f"Número de trienos: {dados_ficha['numero_treinos']}")],
-        [sg.Text(f"Treinos: {dados_ficha['treinos']}")],
+        [sg.Text("Treinos:")],
+        [[sg.Text(f" -> {treino}")] for treino in dados_ficha['treinos']],
         [sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
 
@@ -157,11 +161,11 @@ class TelaFicha(TelaAbstrata):
 
         self.__window.close()
 
-    def pega_dados_remover_ficha(self):
+    def pega_id_ficha(self):
             sg.ChangeLookAndFeel('DarkPurple1')
 
             layout = [
-            [sg.Text("insira o ID da ficha a ser removida", font=('Helvetica', 25, 'bold'), justification='center')],
+            [sg.Text("insira o ID da ficha", font=('Helvetica', 25, 'bold'), justification='center')],
             [sg.Text('ID: ', )],
             [sg.InputText('', key='id_ficha')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
@@ -177,12 +181,29 @@ class TelaFicha(TelaAbstrata):
 
             try:
                 id_ficha = int(id_ficha)
-                return {
-                    "id_ficha": id_ficha,
-                }
+                return id_ficha
+                    
+                
             except ValueError:
                 self.mostra_mensagem('Tente novamente. ID inválido.')
             
+    def mostra_ficha_unica(self, dados_ficha):
+        sg.ChangeLookAndFeel('DarkPurple1')
 
+        layout = [
+        [sg.Text(f'Ficha {dados_ficha['id_ficha']}', font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text(f"Descrição: {dados_ficha['descricao']}")],
+        [sg.Text(f"Número de trienos: {dados_ficha['numero_treinos']}")],
+        [sg.Text(f"Treinos:")],
+        [[sg.Text(f" -> {treino}")] for treino in dados_ficha['treinos']],
+        [sg.Cancel('Cancelar', button_color=('white', 'red'))]
+        ]
 
-            
+        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+
+        while True:
+            event, values = self.__window.read()
+            if event in (sg.WIN_CLOSED, 'Cancelar'):
+                break
+
+        self.__window.close()
