@@ -1,6 +1,6 @@
 class Ficha():
     def __init__(self,id_ficha:int, descricao: str, numero_treinos: int, treinos:list):
-        if isinstance(descricao, int):
+        if isinstance(descricao, str):
             self.__descricao = descricao
         if isinstance(numero_treinos, int):
             self.__prof_reponsavel = numero_treinos

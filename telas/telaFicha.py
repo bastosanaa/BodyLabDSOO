@@ -82,6 +82,8 @@ class TelaFicha(TelaAbstrata):
         button, values = self.open()
         self.close()
 
+        #verificacao da descricao
+
         if button == 'Confirmar':
             descricao = values['descricao']
             numero_treinos = values['numero_treinos']
@@ -92,16 +94,20 @@ class TelaFicha(TelaAbstrata):
             }
 
     def pega_dados_treino(self):
+
+        treinos = [
+            "quadriceps",
+            "glúteos",
+            "posteriores",
+            "costas",
+            "braço",
+            "peito"
+        ]
+
         layout = [
             [sg.Text("Criar Treino", font=('Helvetica', 25, 'bold'), justification='center')],
-            [sg.Text('Titulo: ', )],
-            [sg.InputText('', key='titulo')],
-            [sg.Text('exercicio 1: ', )],
-            [sg.InputText('', key='exercicio_1')],
-            [sg.Text('exercicio 2: ', )],
-            [sg.InputText('', key='exercicio_2')],
-            [sg.Text('exercicio 3: ', )],
-            [sg.InputText('', key='exercicio_3')],
+            [sg.Text('Treino: ')],
+            [sg.Combo(treinos, key='treino', readonly=True)],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
         ]
         
@@ -111,14 +117,51 @@ class TelaFicha(TelaAbstrata):
         self.close()
 
         if button == 'Confirmar':
-            titulo = values['titulo']
-            exercicio_1 = values['exercicio_1']
-            exercicio_2 = values['exercicio_2']
-            exercicio_3 = values['exercicio_3']
+            treino = values['treino']
 
             return {
-                'titulo' : titulo,
-                'exercicio_1' : exercicio_1,
-                'exercicio_2' : exercicio_2,
-                'exercicio_3' :exercicio_3
+                "treino": treino
             }
+        
+    def mostra_ficha(self, dados_ficha, numero_ficha, total_fichas):
+        sg.ChangeLookAndFeel('DarkPurple1')
+
+        layout = [
+        [sg.Text(f'Ficha {numero_ficha}/{total_fichas}', font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text(f"ID: {dados_ficha['id_ficha']}")],
+        [sg.Text(f"Descrição: {dados_ficha['descricao']}")],
+        [sg.Text(f"Número de trienos: {dados_ficha['numero_treinos']}")],
+        [sg.Text(f"Treinos: {dados_ficha['treinos']}")],
+        [sg.Cancel('Cancelar', button_color=('white', 'red'))]
+        ]
+
+        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+
+        while True:
+            event, values = self.__window.read()
+            if event in (sg.WIN_CLOSED, 'Cancelar'):
+                break
+
+        self.__window.close()
+
+    def pega_dados_remover_ficha(self):
+        sg.ChangeLookAndFeel('DarkPurple1')
+
+        layout = [
+        [sg.Text("insira o ID da ficha a ser removida", font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text('ID: ', )],
+        [sg.InputText('', key='id_ficha')],
+        [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
+        ]
+
+        self.__window = sg.Window('Sistema BodyLab', layout)
+
+        button, values = self.open()
+        self.close()
+
+        if button == 'Confirmar':
+            id_ficha = values['id_ficha']
+
+            return {
+                    "id_ficha": id_ficha,
+                }

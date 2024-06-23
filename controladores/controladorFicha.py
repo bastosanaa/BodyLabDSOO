@@ -27,7 +27,7 @@ class ControladorFicha:
     def criar_ficha(self):
         try:
             dados_ficha = self.__tela_ficha.pega_dados_nova_ficha()
-            print(dados_ficha)
+            
             id_ficha =  random.randint(1000, 9999)
             descricao = dados_ficha['descricao']
             n_treinos = int(dados_ficha['numero_treinos'])
@@ -38,27 +38,67 @@ class ControladorFicha:
                 treinos.append(novo_treino)
 
             nova_ficha = Ficha(id_ficha,descricao, n_treinos, treinos)
+            print(id_ficha,descricao, n_treinos, treinos)
             self.__fichas.append(nova_ficha)
+            self.__tela_ficha.mostra_mensagem(f'Ficha {id_ficha} criada com sucesso!')
         except TypeError:
             self.__tela_ficha.mostra_mensagem("Operação Cancelada.")
 
 
     def criar_treino(self):
 
+        treinos = [treino for treino in Treino]
+        print(treinos)
+
         dados_treino = self.__tela_ficha.pega_dados_treino()
-        titulo_treino = dados_treino['titulo']
-        exercicio_1 = dados_treino['exercicio_1']
-        exercicio_2 = dados_treino['exercicio_2']
-        exercicio_3 = dados_treino['exercicio_3']
-        exercicios = [exercicio_1,exercicio_2,exercicio_3]
-        novo_treino = Treino(titulo_treino, exercicios)
-        return novo_treino
+        titulo_treino = dados_treino['treino']
+        
+        return titulo_treino
 
     def remover_ficha(self):
-        pass
-        #remover ficha pelo id
+        #pegar id na tela
+        dados_ficha = self.__tela_ficha.pega_dados_remover_ficha()
+        id = int(dados_ficha['id_ficha'])
+        print(type(id))
+        if not self.__fichas:
+            self.__tela_ficha.mostra_mensagem("Nenhuma ficha cadastrada no sistema")
+            return
+        for ficha in self.__fichas:
+            print(type(ficha.id_ficha))
+            if ficha.id_ficha == id:
+                self.__fichas.remove(ficha)
+                self.__tela_ficha.mostra_mensagem(f'Ficha {id} removida com sucesso')
 
     def listar_fichas(self):
-        pass
+        if not self.__fichas:
+            self.__tela_ficha.mostra_mensagem("Nenhuma ficha cadastrada no sistema")
+            return
+        contagem_fichas = 0 
+        numero_fichas = len(self.__fichas)
+        for ficha in self.__fichas:
+            contagem_fichas += 1
+            dados_ficha = {
+                'id_ficha' : ficha.id_ficha,
+                'descricao': ficha.descricao,
+                'numero_treinos': ficha.numero_treinos,
+                'treinos': ficha.treinos
+            }
+            self.__tela_ficha.mostra_ficha(dados_ficha, contagem_fichas, numero_fichas)
         #listar fichas mostrando o nome da ficha e o titulo dos treinos
         #opcional - mostrar ficha especifica, listando treinos com exercicios
+
+
+        # if not self.__professores:
+        #     self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
+        #     return
+        # contagem_professor = 0
+        # numero_professores = len(self.__professores)
+        # for professor in self.__professores:
+        #     contagem_professor += 1
+        #     dados_professor = {
+        #         'nome': professor.nome,
+        #         'numero_telefone' : professor.numero_telefone,
+        #         'email': professor.email,
+        #         'turno': professor.turno,
+        #         'salario': professor.salario
+        #     }

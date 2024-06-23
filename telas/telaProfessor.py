@@ -126,6 +126,7 @@ class TelaProfessor(TelaAbstrata):
         sg.ChangeLookAndFeel('DarkPurple1')
 
         turnos = [turno.value for turno in Turno]
+        print(turnos)
 
         layout = [
         [sg.Text('Alterar Professor', font=('Helvetica', 25, 'bold'), justification='center')],
@@ -136,8 +137,8 @@ class TelaProfessor(TelaAbstrata):
         [sg.Text(f"Turno: {dados_professor['turno']}")],
         [sg.Text(f"Salário: {dados_professor['salario']}")],
         [sg.Text('Alterações:', font=('Helvetica', 15, 'bold'), justification='center')],
-        [sg.Text('Nome: ', )],
-        [sg.InputText('', key='nome')],
+        # [sg.Text('Nome: ', )]
+        # [sg.InputText('', key='nome')],
         [sg.Text('Número de Telefone: (apenas números)')],
         [sg.InputText('', key='numero_telefone')],
         [sg.Text('E-mail: ')],
