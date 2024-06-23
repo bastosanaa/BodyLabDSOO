@@ -1,12 +1,11 @@
 import pickle
 from abc import ABC, abstractmethod
-import os
 
 class DAO(ABC):
     @abstractmethod
     def __init__(self, datasource=''):
         self.__datasource = datasource
-        self.__cache = {}
+        self.__cache = {} #é aqui que vai ficar a lista que estava no controlador. Nesse exemplo estamos usando um dicionario
         try:
             self.__load()
         except FileNotFoundError:
@@ -16,37 +15,39 @@ class DAO(ABC):
         pickle.dump(self.__cache, open(self.__datasource, 'wb'))
 
     def __load(self):
-       if os.path.getsize(self.__datasource) > 0:
-           with open(self.__datasource, 'rb') as f:
-            self.__cache = pickle.load(f)
-       else:
-           self.__cache = {}
+        try:
+            with open(self.__datasource, 'rb') as f:
+                self.__cache = pickle.load(f)
+        except EOFError:
+            self.__cache = {}
+
+    #esse método precisa chamar o self.__dump()
+    def add(self, key, obj):
+        self.__cache[key] = obj
+        self.__dump()  #atualiza o arquivo depois de add novo amigo
+
+    #cuidado: esse update só funciona se o objeto com essa chave já existe
+    def update(self, key, obj):
+        try:
+            if(self.__cache[key] != None):
+                self.__cache[key] = obj #atualiza a entrada
+                self.__dump()  #atualiza o arquivo
+        except KeyError:
+            pass  # implementar aqui o tratamento da exceção
 
     def get(self, key):
         try:
             return self.__cache[key]
         except KeyError:
-            print("Chave não encontrada")
-            return None
-    def add(self, key, obj):
-        self.__cache[key] = obj
-        self.__dump()
+            pass #implementar aqui o tratamento da exceção
 
-    def update(self, key, obj):
-        try:
-            if(self.__cache[key] != None):
-                self.__cache[key] = obj
-                self.__dump()
-        except KeyError:
-            print("Chave não encontrada")
-
+    # esse método precisa chamar o self.__dump()
     def remove(self, key):
         try:
-            if(self.__cache[key] != None):
-                self.__cache.pop(key)
-                self.__dump()
+            self.__cache.pop(key)
+            self.__dump() #atualiza o arquivo depois de remover um objeto
         except KeyError:
-            print("Chave não encontrada")
+            pass #implementar aqui o tratamento da exceção
 
     def get_all(self):
         return self.__cache.values()

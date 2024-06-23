@@ -48,6 +48,9 @@ class ControladorMatricula:
                     return
 
                 id_matricula = random.randint(1000, 9999)
+                while self.buscar_matricula_por_id(id_matricula):
+                    id_matricula = random.randint(1000, 9999)
+
                 mensalidade = self.definir_mensalidade_de_acordo_com_plano(plano)
                 data_inicio_matricula = datetime.now()
                 data_vencimento_matricula = data_inicio_matricula + timedelta(days=30)

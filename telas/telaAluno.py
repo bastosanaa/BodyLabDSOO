@@ -82,7 +82,7 @@ class TelaAluno(TelaAbstrata):
     def pega_dados_alterar_aluno(self):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
-            [sg.Text("Alterar Dados do Aluno", font=('Helvetica', 25, 'bold'), justification='center')],
+            [sg.Text("Alterar Dados do Aluno", font=('Helvetica', 20, 'bold'), justification='center')],
             [sg.Text('Nome: ')],
             [sg.InputText('', key='nome')],
             [sg.Text('Numero de Telefone: ')],
@@ -144,7 +144,7 @@ class TelaAluno(TelaAbstrata):
         layout = [
             [sg.Text('seleciona aluno', font=("Helvica", 20, 'bold'))],
             [sg.Text('Digite o cpf do aluno:', font=("Helvica", 15))],
-            [sg.Text('cpf:', size=(15, 1)), sg.InputText('', key='cpf')],
+            [sg.Text('cpf:'), sg.InputText('', key='cpf')],
             [sg.Radio('Retornar', "RD1", key='0')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]

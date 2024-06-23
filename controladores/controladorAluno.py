@@ -91,7 +91,7 @@ class ControladorAluno():
                     aluno.email = dados_aluno['email']
                 if 'endereco' in dados_aluno:
                     aluno.endereco = dados_aluno['endereco']
-                self.__aluno_dao.add(aluno)  # Update the student in the DAO
+                self.__aluno_dao.update(aluno)
                 self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
         except NomeNaoEhAlfa as e:
             self.__tela_aluno.mostra_mensagem(str(e))
