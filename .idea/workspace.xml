@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="dao matricula e alunos funcionando">
+    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="melhorias">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DAOs/aluno_dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAOs/aluno_dao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DAOs/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAOs/dao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DAOs/matricula_dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAOs/matricula_dao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alunos.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/alunos.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controladores/controladorAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorAluno.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controladores/controladorMatricula.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorMatricula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matriculas.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/matriculas.pkl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -135,7 +133,8 @@
       <workItem from="1718921718722" duration="209000" />
       <workItem from="1718921939223" duration="653000" />
       <workItem from="1718922670989" duration="1151000" />
-      <workItem from="1719151427055" duration="684000" />
+      <workItem from="1719151427055" duration="8215000" />
+      <workItem from="1719161574390" duration="1400000" />
     </task>
     <task id="LOCAL-00001" summary="Sistema de aluno e matricula ok, esperandoa  criacao do DAO">
       <option name="closed" value="true" />
@@ -177,7 +176,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718923755009</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="mudanças">
+      <option name="closed" value="true" />
+      <created>1719154929553</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1719154929553</updated>
+    </task>
+    <task id="LOCAL-00007" summary="melhorias">
+      <option name="closed" value="true" />
+      <created>1719158147718</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1719158147718</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,9 +214,11 @@
     <MESSAGE value="update na entidade aluno" />
     <MESSAGE value="preparando o ambiente para receber o DAO" />
     <MESSAGE value="dao matricula e alunos funcionando" />
-    <option name="LAST_COMMIT_MESSAGE" value="dao matricula e alunos funcionando" />
+    <MESSAGE value="mudanças" />
+    <MESSAGE value="melhorias" />
+    <option name="LAST_COMMIT_MESSAGE" value="melhorias" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BodyLabDSOO$main.coverage" NAME="main Coverage Results" MODIFIED="1719152109874" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BodyLabDSOO$main.coverage" NAME="main Coverage Results" MODIFIED="1719159585719" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -1,6 +1,6 @@
 from DAOs.dao import DAO
 from modelos.matricula import Matricula
-
+import pickle
 class MatriculaDAO(DAO):
     def __init__(self):
         super().__init__('matriculas.pkl')
@@ -16,7 +16,6 @@ class MatriculaDAO(DAO):
     def remove(self, id_matricula: int):
         if isinstance(id_matricula, int):
             super().remove(id_matricula)
-            self.__dump()
 
     def update(self, matricula: Matricula):
         if matricula is not None and isinstance(matricula, Matricula) and isinstance(matricula.id_matricula, int):

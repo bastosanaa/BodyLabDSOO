@@ -80,7 +80,7 @@ class ControladorMatricula:
         id_matricula_escolhida = self.__tela_matricula.seleciona_id_matricula()
         matricula = self.buscar_matricula_por_id(id_matricula_escolhida)
         if matricula:
-            self.__matriculas_dao.remove(matricula)
+            self.__matriculas_dao.remove(matricula.id_matricula)
             self.__tela_matricula.mostra_mensagem("Matrícula cancelada com sucesso")
         else:
             self.__tela_matricula.mostra_mensagem("Matrícula não encontrada")
