@@ -3,12 +3,23 @@ from modelos.turno import Turno
 
 class Pessoa(ABC):
     @abstractmethod
-    def __init__(self, nome: str, numero_telefone: int, email: str):
+    def __init__(self,cpf:int, nome: str, numero_telefone: int, email: str):
         if isinstance(nome, str):
             self.__nome = nome
         self.__numero_telefone = numero_telefone
         if isinstance(email, str):
             self.__email = email
+        if isinstance(cpf,int):
+            self.__cpf = cpf
+
+    @property
+    def cpf(self):
+        return self.__cpf
+
+    @cpf.setter
+    def cpf(self, cpf):
+        self.__cpf = cpf
+
 
     @property
     def nome(self):

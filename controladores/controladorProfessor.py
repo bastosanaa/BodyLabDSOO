@@ -41,6 +41,7 @@ class ControladorProfessor():
         try:
             dados_professor = self.__tela_professor.pega_dados_novo_professor()
             nome = dados_professor['nome']
+            cpf = dados_professor['cpf']
             numero_telefone = dados_professor['numero_telefone']
             email = dados_professor['email']
             turno = dados_professor['turno']
@@ -50,7 +51,7 @@ class ControladorProfessor():
                 for professor in self.__professores:
                     if professor.nome == nome and professor.email == email:
                         raise ProfessorDuplicado
-                novo_professor = Professor(nome, numero_telefone, email, turno, salario)
+                novo_professor = Professor(cpf, nome, numero_telefone, email, turno, salario)
                 self.__professores.append(novo_professor)
                 self.adicionar_professor_turno(turno)
                 self.__tela_professor.mostra_mensagem("Professor adicionado com sucesso!")
@@ -69,6 +70,7 @@ class ControladorProfessor():
             contagem_professor += 1
             dados_professor = {
                 'nome': professor.nome,
+                'cpf': professor.cpf,
                 'numero_telefone' : professor.numero_telefone,
                 'email': professor.email,
                 'turno': professor.turno,
@@ -83,12 +85,13 @@ class ControladorProfessor():
             try:
                 dados_professor = self.__tela_professor.pega_dados_alterar_professor()
                 nome = dados_professor['nome']
-                email = dados_professor['email']
+                cpf = dados_professor['cpf']
 
                 for professor in self.__professores:
-                    if professor.nome == nome and professor.email == email:
+                    if professor.nome == nome and professor.cpf == cpf:
                         dados_professor = {
                         'nome': professor.nome,
+                        'cpf': professor.cpf,
                         'numero_telefone' : professor.numero_telefone,
                         'email': professor.email,
                         'turno': professor.turno,
@@ -116,10 +119,10 @@ class ControladorProfessor():
             try:
                 dados_professor = self.__tela_professor.pega_dados_remover_professor()
                 nome = dados_professor['nome']
-                email = dados_professor['email']
+                cpf = dados_professor['cpf']
 
                 for professor in self.__professores:
-                    if professor.nome == nome and professor.email == email:
+                    if professor.nome == nome and professor.cpf == cpf:
                         self.__professores.remove(professor)
                         self.__tela_professor.mostra_mensagem("Professor removido com sucesso!")
                         return

@@ -4,7 +4,9 @@ from Exception.NumeroTelefoneInvalidoException import NumeroInvalido
 from Exception.NomeNaoEhAlfa import NomeNaoEhAlfa
 from Exception.EmailInvalido import EmailInvalido
 from Exception.SalarioInválido import SalarioInvalido
+from Exception.CPFinvalido import CPFinvalido
 from telas.telaAbstrata import TelaAbstrata
+
 from modelos.turno import Turno
 
 class TelaProfessor(TelaAbstrata):
@@ -103,8 +105,8 @@ class TelaProfessor(TelaAbstrata):
         [sg.Text("insira os dados do professor a ser removido", font=('Helvetica', 25, 'bold'), justification='center')],
         [sg.Text('Nome: ', )],
         [sg.InputText('', key='nome')],
-        [sg.Text('Email: ', )],
-        [sg.InputText('', key='email')],
+        [sg.Text('CPF: ', )],
+        [sg.InputText('', key='cpf')],
         [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
         ]
 
@@ -115,11 +117,11 @@ class TelaProfessor(TelaAbstrata):
 
         if button == 'Confirmar':
             nome = values['nome']
-            email = values['email']
+            cpf = values['cpf']
 
             return {
                     "nome": nome,
-                    "email": email
+                    "cpf": cpf
                 }
 
     def pega_alteracoes_professor(self, dados_professor):
@@ -180,6 +182,8 @@ class TelaProfessor(TelaAbstrata):
             [sg.Text("Cadastrar Professor", font=('Helvetica', 25, 'bold'), justification='center')],
             [sg.Text('Nome: ', )],
             [sg.InputText('', key='nome')],
+            [sg.Text('CPF: ', )],
+            [sg.InputText('', key='cpf')],
             [sg.Text('Número de Telefone: (apenas números)')],
             [sg.InputText('', key='numero_telefone')],
             [sg.Text('E-mail: ')],
@@ -197,6 +201,7 @@ class TelaProfessor(TelaAbstrata):
 
         if button == 'Confirmar':
             nome = values['nome']
+            cpf = values['cpf']
             numero_telefone = values['numero_telefone']
             email = values['email']
             turno = values['turno']
@@ -209,6 +214,7 @@ class TelaProfessor(TelaAbstrata):
                 self.verifica_email(email)
                 self.verifica_turno(turno)
                 self.verifica_salario(salario)
+                self.verifica_cpf(cpf)
             except NomeNaoEhAlfa:
                 self.mostra_mensagem("Tente Novamente. Nome inválido")
                 return
@@ -221,12 +227,16 @@ class TelaProfessor(TelaAbstrata):
             except SalarioInvalido:
                 self.mostra_mensagem("Tente Novamente. Salário inválido (dê um salário digno ao seu funcionário!)")
                 return
+            except CPFinvalido:
+                self.mostra_mensagem("Tente Novamente. CPF inválido")
+                return
             except ValueError:
                 self.mostra_mensagem("Tente Novamente. Preencha todos os campos")
                 return
 
             return {
                 "nome": nome,
+                "cpf": cpf,
                 "numero_telefone": numero_telefone,
                 "email": email,
                 "turno": turno,
@@ -240,8 +250,8 @@ class TelaProfessor(TelaAbstrata):
         [sg.Text("insira os dados do professor a ser removido", font=('Helvetica', 25, 'bold'), justification='center')],
         [sg.Text('Nome: ', )],
         [sg.InputText('', key='nome')],
-        [sg.Text('Email: ', )],
-        [sg.InputText('', key='email')],
+        [sg.Text('Cpf: ', )],
+        [sg.InputText('', key='cpf')],
         [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
         ]
 
@@ -252,11 +262,11 @@ class TelaProfessor(TelaAbstrata):
 
         if button == 'Confirmar':
             nome = values['nome']
-            email = values['email']
+            cpf = values['cpf']
 
             return {
                     "nome": nome,
-                    "email": email
+                    "cpf": cpf
                 }
 
     def mostrar_relatorio_prof_turno(self, professores_por_turno):
@@ -321,5 +331,26 @@ class TelaProfessor(TelaAbstrata):
             return
         raise ValueError
     
+    def verifica_cpf(self,cpf) -> bool:
+        if cpf:
+            cpf = ''.join(filter(str.isdigit, cpf))
+            
+            if len(cpf) != 11:
+                raise CPFinvalido
+
+            if cpf == cpf[0] * len(cpf):
+                raise CPFinvalido
+
+            soma = sum(int(cpf[i]) * (10 - i) for i in range(9))
+            primeiro_digito_verificador = (soma * 10 % 11) % 10
+
+            soma = sum(int(cpf[i]) * (11 - i) for i in range(10))
+            segundo_digito_verificador = (soma * 10 % 11) % 10
+
+            if cpf[-2] == str(primeiro_digito_verificador) and cpf[-1] == str(segundo_digito_verificador):
+                return
+            raise CPFinvalido
+        raise ValueError
+        
 
     

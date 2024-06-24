@@ -3,10 +3,18 @@ from modelos.turno import Turno
 
 
 class Professor(Pessoa):
-    def __init__(self, nome: str, numero_telefone: int, email: str, turno: str, salario: float):
-        super().__init__(nome, numero_telefone, email)
+    def __init__(self,cpf:int , nome: str, numero_telefone: int, email: str, turno: str, salario: float):
+        super().__init__(cpf, nome, numero_telefone, email)
         self.__salario = salario
         self.__turno = turno
+
+    @property
+    def cpf(self):
+        return self.__cpf
+
+    @cpf.setter
+    def cpf(self, cpf):
+        self.__cpf = cpf
     
     @property
     def salario(self):

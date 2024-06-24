@@ -7,7 +7,7 @@ from modelos.endereco import  Endereco
 class Aluno(Pessoa):
     def __init__(self, cpf: int , nome: str, numero_telefone: int,
                  email: str, matricula: Matricula, endereco: Endereco ):
-        super().__init__(nome, numero_telefone, email)
+        super().__init__(cpf, nome, numero_telefone, email)
         if isinstance(matricula, Matricula):
             self.__matricula = matricula
         self.__ficha = ''
