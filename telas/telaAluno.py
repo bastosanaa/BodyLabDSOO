@@ -83,10 +83,6 @@ class TelaAluno(TelaAbstrata):
         sg.ChangeLookAndFeel('DarkPurple1')
         layout = [
             [sg.Text("Alterar Dados do Aluno", font=('Helvetica', 20, 'bold'), justification='center')],
-            [sg.Text('Nome: ')],
-            [sg.InputText('', key='nome')],
-            [sg.Text('Numero de Telefone: ')],
-            [sg.InputText('', key='numero_telefone')],
             [sg.Text('E-mail: ')],
             [sg.InputText('', key='email')],
             [sg.Text('Rua: ')],
@@ -105,13 +101,11 @@ class TelaAluno(TelaAbstrata):
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
 
         button, values = self.open()
-        nome = values['nome']
-        numero_telefone = values['numero_telefone']
         email = values['email']
         endereco = Endereco(values['rua'], values['complemento'], values['bairro'], values['cidade'], values['cep'])
 
         self.close()
-        return {"nome": nome, "numero_telefone": numero_telefone, "email": email, "endereco": endereco},
+        return {"email": email, "endereco": endereco},
 
     def lista_de_alunos(self, dados_alunos):
         lista_alunos = [[

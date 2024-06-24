@@ -73,10 +73,6 @@ class ControladorAluno():
                 self.__tela_aluno.mostra_mensagem("Aluno não encontrado")
             else:
                 dados_aluno = self.__tela_aluno.pega_dados_alterar_aluno()
-                if 'nome' in dados_aluno:
-                    if not dados_aluno['nome'].isalpha():
-                        raise NomeNaoEhAlfa()
-                    aluno.nome = dados_aluno['nome']
                 if 'numero_telefone' in dados_aluno:
                     if len(dados_aluno['numero_telefone']) != 11 or not dados_aluno['numero_telefone'].isnumeric:
                         raise NumeroInvalido()
@@ -87,9 +83,10 @@ class ControladorAluno():
                     aluno.email = dados_aluno['email']
                 if 'endereco' in dados_aluno:
                     aluno.endereco = dados_aluno['endereco']
-                self.__alunos_dao.update(aluno)
+                self.__alunos_dao.remove(cpf_aluno)
+                self.__alunos_dao.add(aluno)
                 self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
-        except (NomeNaoEhAlfa, NumeroInvalido, EmailInvalido) as e:
+        except (NumeroInvalido, EmailInvalido) as e:
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def listar_alunos(self):

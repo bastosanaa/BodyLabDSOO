@@ -191,7 +191,7 @@ class TelaFicha(TelaAbstrata):
         sg.ChangeLookAndFeel('DarkPurple1')
 
         layout = [
-        [sg.Text(f'Ficha {dados_ficha['id_ficha']}', font=('Helvetica', 25, 'bold'), justification='center')],
+        [sg.Text(f"Ficha {dados_ficha['id_ficha']}", font=('Helvetica', 25, 'bold'), justification='center')],
         [sg.Text(f"Descrição: {dados_ficha['descricao']}")],
         [sg.Text(f"Número de trienos: {dados_ficha['numero_treinos']}")],
         [sg.Text(f"Treinos:")],
