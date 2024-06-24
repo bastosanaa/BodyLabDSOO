@@ -73,18 +73,21 @@ class ControladorAluno():
                 self.__tela_aluno.mostra_mensagem("Aluno não encontrado")
             else:
                 dados_aluno = self.__tela_aluno.pega_dados_alterar_aluno()
-                if 'numero_telefone' in dados_aluno:
+                if 'nome' in dados_aluno and dados_aluno['nome']:
+                    if not dados_aluno['nome'].isalpha():
+                        raise NomeNaoEhAlfa()
+                    aluno.nome = dados_aluno['nome']
+                if 'numero_telefone' in dados_aluno and dados_aluno['numero_telefone']:
                     if len(dados_aluno['numero_telefone']) != 11 or not dados_aluno['numero_telefone'].isnumeric:
                         raise NumeroInvalido()
                     aluno.numero_telefone = dados_aluno['numero_telefone']
-                if 'email' in dados_aluno:
+                if 'email' in dados_aluno and dados_aluno['email']:
                     if '@' not in dados_aluno['email']:
                         raise EmailInvalido()
                     aluno.email = dados_aluno['email']
-                if 'endereco' in dados_aluno:
+                if 'endereco' in dados_aluno and dados_aluno['endereco']:
                     aluno.endereco = dados_aluno['endereco']
-                self.__alunos_dao.remove(cpf_aluno)
-                self.__alunos_dao.add(aluno)
+                self.__alunos_dao.update(aluno)  # atualiza o aluno no DAO
                 self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
         except (NumeroInvalido, EmailInvalido) as e:
             self.__tela_aluno.mostra_mensagem(str(e))

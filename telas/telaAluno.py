@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+
 from modelos.endereco import Endereco
 from telas.telaAbstrata import TelaAbstrata
 
@@ -80,32 +81,40 @@ class TelaAluno(TelaAbstrata):
                 "rua": rua, "complemento": complemento, "bairro": bairro, "cidade": cidade, "cep": cep}
 
     def pega_dados_alterar_aluno(self):
-        sg.ChangeLookAndFeel('DarkPurple1')
+        sg.theme('DarkPurple1')
         layout = [
-            [sg.Text("Alterar Dados do Aluno", font=('Helvetica', 20, 'bold'), justification='center')],
-            [sg.Text('E-mail: ')],
-            [sg.InputText('', key='email')],
-            [sg.Text('Rua: ')],
-            [sg.InputText('', key='rua')],
-            [sg.Text('Complemento: ')],
-            [sg.InputText('', key='complemento')],
-            [sg.Text('Bairro: ')],
-            [sg.InputText('', key='bairro')],
-            [sg.Text('Cidade: ')],
-            [sg.InputText('', key='cidade')],
-            [sg.Text('CEP: ')],
-            [sg.InputText('', key='cep')],
-            [sg.Radio('Retornar', "RD1", key='0')],
-            [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
+            [sg.Text("Alterar Dados do Aluno", font=('Helvetica', 20, 'bold'), justification='center', pad=(0, 20))],
+            [sg.Text("Selecione os dados que deseja alterar e digite os novos valores", pad=(0, 10))],
+            [sg.Checkbox('Nome: ', key='nome_check'), sg.InputText('', key='nome', size=(20, 1))],
+            [sg.Checkbox('N° de Telefone: ', key='numero_telefone_check'),
+             sg.InputText('', key='numero_telefone', size=(20, 1))],
+            [sg.Checkbox('E-mail: ', key='email_check'), sg.InputText('', key='email', size=(20, 1))],
+            [sg.Checkbox('Rua: ', key='rua_check'), sg.InputText('', key='rua', size=(20, 1))],
+            [sg.Checkbox('Complemento: ', key='complemento_check'), sg.InputText('', key='complemento', size=(20, 1))],
+            [sg.Checkbox('Bairro: ', key='bairro_check'), sg.InputText('', key='bairro', size=(20, 1))],
+            [sg.Checkbox('Cidade: ', key='cidade_check'), sg.InputText('', key='cidade', size=(20, 1))],
+            [sg.Checkbox('CEP: ', key='cep_check'), sg.InputText('', key='cep', size=(20, 1))],
+            [sg.Radio('Retornar', "RD1", key='0', pad=(0, 10))],
+            [sg.Button('Confirmar', button_color=('white', 'green'), size=(10, 1)),
+             sg.Cancel('Cancelar', button_color=('white', 'red'), size=(10, 1))]
         ]
-        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+        self.__window = sg.Window('Sistema BodyLab', layout)
 
         button, values = self.open()
-        email = values['email']
-        endereco = Endereco(values['rua'], values['complemento'], values['bairro'], values['cidade'], values['cep'])
+        dados_alterar = {}
+        if values['nome_check']:
+            dados_alterar['nome'] = values['nome']
+        if values['numero_telefone_check']:
+            dados_alterar['numero_telefone'] = values['numero_telefone']
+        if values['email_check']:
+            dados_alterar['email'] = values['email']
+        if values['rua_check'] or values['complemento_check'] or values['bairro_check'] or values['cidade_check'] or \
+                values['cep_check']:
+            endereco = Endereco(values['rua'], values['complemento'], values['bairro'], values['cidade'], values['cep'])
+            dados_alterar['endereco'] = endereco
 
         self.close()
-        return {"email": email, "endereco": endereco},
+        return dados_alterar
 
     def lista_de_alunos(self, dados_alunos):
         lista_alunos = [[
