@@ -212,6 +212,8 @@ class TelaProfessor(TelaAbstrata):
             turno = values['turno']
             salario = values['salario']
 
+            cpf = ''.join(filter(str.isdigit, cpf))
+
             # Realizando as verificações
             try:
                 self.verifica_nome(nome)
