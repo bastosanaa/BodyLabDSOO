@@ -1,12 +1,13 @@
 from telas.telaProfessor import TelaProfessor
 from Exception.ProfessorDuplicado import ProfessorDuplicado
 from modelos.professor import Professor
+from DAOs.professor_dao import ProfessorDAO
 
 class ControladorProfessor():
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
         self.__tela_professor = TelaProfessor()
-        self.__professores = []
+        self.__professores_dao = ProfessorDAO()
         self.__professores_por_turno = {
             'matutino': 0,
             'vespertino': 0,
@@ -40,6 +41,7 @@ class ControladorProfessor():
     def cadastar_professor(self):
         try:
             dados_professor = self.__tela_professor.pega_dados_novo_professor()
+            print(dados_professor)
             nome = dados_professor['nome']
             cpf = dados_professor['cpf']
             numero_telefone = dados_professor['numero_telefone']
@@ -48,11 +50,11 @@ class ControladorProfessor():
             salario = dados_professor['salario']
 
             try:
-                for professor in self.__professores:
+                for professor in self.__professores_dao.get_all():
                     if professor.nome == nome and professor.email == email:
                         raise ProfessorDuplicado
                 novo_professor = Professor(cpf, nome, numero_telefone, email, turno, salario)
-                self.__professores.append(novo_professor)
+                self.__professores_dao.add(novo_professor)
                 self.adicionar_professor_turno(turno)
                 self.__tela_professor.mostra_mensagem("Professor adicionado com sucesso!")
             except ProfessorDuplicado:
@@ -61,13 +63,12 @@ class ControladorProfessor():
             self.__tela_professor.mostra_mensagem("Operação Cancelada.")
 
     def listar_professores(self):
-        if not self.__professores:
+        professores = self.__professores_dao.get_all()
+        if not professores:
             self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
             return
-        contagem_professor = 0
-        numero_professores = len(self.__professores)
-        for professor in self.__professores:
-            contagem_professor += 1
+        dados_professores = []
+        for professor in professores:
             dados_professor = {
                 'nome': professor.nome,
                 'cpf': professor.cpf,
@@ -76,18 +77,19 @@ class ControladorProfessor():
                 'turno': professor.turno,
                 'salario': professor.salario
             }
-            self.__tela_professor.mostra_professor(dados_professor, contagem_professor, numero_professores)
+            dados_professores.append(dados_professor)
+            self.__tela_professor.mostra_professor(dados_professores)
         
 
     def selecionar_professor_a_alterar(self):
         #perguntar qual professor 
-        if self.__professores:
+        if self.__professores_dao:
             try:
                 dados_professor = self.__tela_professor.pega_dados_alterar_professor()
                 nome = dados_professor['nome']
                 cpf = dados_professor['cpf']
 
-                for professor in self.__professores:
+                for professor in self.__professores_dao.get_all():
                     if professor.nome == nome and professor.cpf == cpf:
                         dados_professor = {
                         'nome': professor.nome,
@@ -97,7 +99,6 @@ class ControladorProfessor():
                         'turno': professor.turno,
                         'salario': professor.salario
                         }
-                        print(dados_professor)
                         self.alterar_professor_selecionado(professor,dados_professor)
                         return
             except TypeError as e:
@@ -115,19 +116,15 @@ class ControladorProfessor():
         print(professor)
 
     def remover_professor(self):
-        if self.__professores:
+        if self.__professores_dao:
             try:
-                dados_professor = self.__tela_professor.pega_dados_remover_professor()
-                nome = dados_professor['nome']
-                cpf = dados_professor['cpf']
-
-                for professor in self.__professores:
-                    if professor.nome == nome and professor.cpf == cpf:
-                        self.__professores.remove(professor)
-                        self.__tela_professor.mostra_mensagem("Professor removido com sucesso!")
-                        return
-                self.__tela_professor.mostra_mensagem("Tente novamente. Professor não encontrado no sistema.")
-                return
+                cpf = self.__tela_professor.pega_dados_remover_professor()
+                professor = self.__professores_dao.get(cpf)
+                if not professor:
+                    self.__tela_professor.mostra_mensagem("Tente novamente. Professor não encontrado no sistema.")
+                    return
+                self.__professores_dao.remove(professor)
+                self.__tela_professor.mostra_mensagem("Professor removido com sucesso!")
             except TypeError:
                 self.__tela_professor.mostra_mensagem("Operação Cancelada.")
         self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")

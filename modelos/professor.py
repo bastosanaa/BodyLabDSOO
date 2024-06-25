@@ -7,6 +7,7 @@ class Professor(Pessoa):
         super().__init__(cpf, nome, numero_telefone, email)
         self.__salario = salario
         self.__turno = turno
+        self.__cpf = cpf
 
     @property
     def cpf(self):
@@ -15,6 +16,7 @@ class Professor(Pessoa):
     @cpf.setter
     def cpf(self, cpf):
         self.__cpf = cpf
+
     
     @property
     def salario(self):

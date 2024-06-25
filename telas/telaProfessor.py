@@ -74,29 +74,34 @@ class TelaProfessor(TelaAbstrata):
 
         self.__window.close()
 
-    def mostra_professor(self, dados_professor, numero_professor, numero_professores):
+    def mostra_professor(self, dados_professores):
+
         sg.ChangeLookAndFeel('DarkPurple1')
+        lista_professores = [[
+                    dados["cpf"],
+                    dados["nome"],
+                    dados["numero_telefone"],
+                    dados["email"],
+                    dados["salario"],
+                    dados["turno"]
+                ] for dados in dados_professores]
+
+        headers = ["CPF", "Nome", "Telefone", "E-mail", "Salário", "Turno"]
 
         layout = [
-        [sg.Text(f'Professor {numero_professor}/{numero_professores}', font=('Helvetica', 25, 'bold'), justification='center')],
-        [sg.Text(f"Nome: {dados_professor['nome']}")],
-        [sg.Text(f"Número de Telefone: {dados_professor['numero_telefone']}")],
-        [sg.Text(f"E-mail: {dados_professor['email']}")],
-        [sg.Text(f"Turno: {dados_professor['turno']}")],
-        [sg.Text(f"Salário: {dados_professor['salario']}")],
-        [sg.Cancel('Cancelar', button_color=('white', 'red'))]
+            [sg.Column([[sg.Text('Lista de Professores da BodyLab', justification='center', font=('Helvetica', 20, 'bold'))]],
+                    expand_x=True)],
+            [sg.Table(values=lista_professores, headings=headers, display_row_numbers=False, auto_size_columns=True,
+                    font=('Helvetica', 12),
+                    size=(70, 40), num_rows=min(25, len(lista_professores)), col_widths=[15, 20, 15, 20, 50])],
+            [sg.Button('OK', button_color=('white', 'green'))]
         ]
+
 
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
 
-
-        while True:
-            event, values = self.__window.read()
-            if event in (sg.WIN_CLOSED, 'Cancelar'):
-                break
-
-        self.__window.close()
-
+        button, values = self.open()
+        self.close()
 
     def pega_dados_alterar_professor(self):
         sg.ChangeLookAndFeel('DarkPurple1')
@@ -247,9 +252,7 @@ class TelaProfessor(TelaAbstrata):
         sg.ChangeLookAndFeel('DarkPurple1')
 
         layout = [
-        [sg.Text("insira os dados do professor a ser removido", font=('Helvetica', 25, 'bold'), justification='center')],
-        [sg.Text('Nome: ', )],
-        [sg.InputText('', key='nome')],
+        [sg.Text("insira o cpf do professor a ser removido", font=('Helvetica', 25, 'bold'), justification='center')],
         [sg.Text('Cpf: ', )],
         [sg.InputText('', key='cpf')],
         [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
@@ -261,13 +264,10 @@ class TelaProfessor(TelaAbstrata):
         self.close()
 
         if button == 'Confirmar':
-            nome = values['nome']
             cpf = values['cpf']
 
-            return {
-                    "nome": nome,
-                    "cpf": cpf
-                }
+            return cpf
+                
 
     def mostrar_relatorio_prof_turno(self, professores_por_turno):
         sg.ChangeLookAndFeel('DarkPurple1')
@@ -295,6 +295,7 @@ class TelaProfessor(TelaAbstrata):
     def verifica_nome(self, nome):
         
             if nome:
+                nome = nome.replace(' ', '')
                 if not nome.isalpha():
                     raise NomeNaoEhAlfa
                 return
