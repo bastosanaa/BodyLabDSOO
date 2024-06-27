@@ -104,7 +104,7 @@ class ControladorMatricula:
                 dados_matriculas[matricula.id_matricula] = dados_matricula
             self.__tela_matricula.lista_de_matricula(dados_matriculas)
 
-    def vizualizar_matricula_especifica(self):
+    def visualizar_matricula_especifica(self):
         id_matricula = self.__tela_matricula.seleciona_id_matricula()
         matricula = self.buscar_matricula_por_id(id_matricula)
         if matricula:

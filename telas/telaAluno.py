@@ -1,7 +1,9 @@
 import PySimpleGUI as sg
 
+from Exception.CampoVazio import CampoVazio
 from modelos.endereco import Endereco
 from telas.telaAbstrata import TelaAbstrata
+from Exception.OpcaoInvalida import OpcaoInvalida
 
 
 class TelaAluno(TelaAbstrata):
@@ -64,21 +66,45 @@ class TelaAluno(TelaAbstrata):
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+        while True:
+            try:
+                button, values = self.open()
+                if values is None:
+                    return
+                cpf = values['cpf']
+                rua = values['rua']
+                complemento = values['complemento']
+                bairro = values['bairro']
+                cidade = values['cidade']
+                cep = values['cep']
+                nome = values['nome']
+                numero_telefone = values['numero_telefone']
+                email = values['email']
 
-        button, values = self.open()
-        cpf = values['cpf']
-        rua = values['rua']
-        complemento = values['complemento']
-        bairro = values['bairro']
-        cidade = values['cidade']
-        cep = values['cep']
-        nome = values['nome']
-        numero_telefone = values['numero_telefone']
-        email = values['email']
+                if not cpf:
+                    raise CampoVazio('CPF')
+                if not rua:
+                    raise CampoVazio('Rua')
+                if not complemento:
+                    raise CampoVazio('Complemento')
+                if not bairro:
+                    raise CampoVazio('Bairro')
+                if not cidade:
+                    raise CampoVazio('Cidade')
+                if not cep:
+                    raise CampoVazio('CEP')
+                if not nome:
+                    raise CampoVazio('Nome')
+                if not numero_telefone:
+                    raise CampoVazio('Número de Telefone')
+                if not email:
+                    raise CampoVazio('E-mail')
 
-        self.close()
-        return {"cpf": cpf, "nome": nome, "numero_telefone": numero_telefone, "email": email,
-                "rua": rua, "complemento": complemento, "bairro": bairro, "cidade": cidade, "cep": cep}
+                self.close()
+                return {"cpf": cpf, "nome": nome, "numero_telefone": numero_telefone, "email": email,
+                        "rua": rua, "complemento": complemento, "bairro": bairro, "cidade": cidade, "cep": cep}
+            except CampoVazio as e:
+                self.mostra_mensagem(str(e))
 
     def pega_dados_alterar_aluno(self):
         sg.theme('DarkPurple1')
@@ -99,22 +125,29 @@ class TelaAluno(TelaAbstrata):
              sg.Cancel('Cancelar', button_color=('white', 'red'), size=(10, 1))]
         ]
         self.__window = sg.Window('Sistema BodyLab', layout)
+        try:
+            button, values = self.open()
+            dados_alterar = {}
+            if values['nome_check']:
+                dados_alterar['nome'] = values['nome']
+            if values['numero_telefone_check']:
+                dados_alterar['numero_telefone'] = values['numero_telefone']
+            if values['email_check']:
+                dados_alterar['email'] = values['email']
+            if values['rua_check'] or values['complemento_check'] or values['bairro_check'] or values[
+                'cidade_check'] or \
+                    values['cep_check']:
+                endereco = Endereco(values['rua'], values['complemento'], values['bairro'], values['cidade'],
+                                    values['cep'])
+                dados_alterar['endereco'] = endereco
 
-        button, values = self.open()
-        dados_alterar = {}
-        if values['nome_check']:
-            dados_alterar['nome'] = values['nome']
-        if values['numero_telefone_check']:
-            dados_alterar['numero_telefone'] = values['numero_telefone']
-        if values['email_check']:
-            dados_alterar['email'] = values['email']
-        if values['rua_check'] or values['complemento_check'] or values['bairro_check'] or values['cidade_check'] or \
-                values['cep_check']:
-            endereco = Endereco(values['rua'], values['complemento'], values['bairro'], values['cidade'], values['cep'])
-            dados_alterar['endereco'] = endereco
+            if not dados_alterar:
+                raise OpcaoInvalida()
 
-        self.close()
-        return dados_alterar
+            self.close()
+            return dados_alterar
+        except OpcaoInvalida as e:
+            self.mostra_mensagem(str(e))
 
     def lista_de_alunos(self, dados_alunos):
         lista_alunos = [[

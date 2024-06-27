@@ -19,6 +19,8 @@ class ControladorAluno():
     def cadastrar_aluno(self):
         try:
             dados_aluno = self.__tela_aluno.pega_dados_aluno()
+            if dados_aluno is None:
+                return
             cpf = dados_aluno['cpf']
             if not cpf.isnumeric() or len(cpf) != 11:
                 raise NumeroInvalido()
@@ -66,6 +68,11 @@ class ControladorAluno():
        return self.__alunos_dao.get(cpf_aluno)
 
     def alterar_aluno(self):
+        cpf = self.__tela_aluno.seleciona_aluno()
+        if cpf is not None:
+            dados_aluno = self.__tela_aluno.pega_dados_alterar_aluno()
+            if dados_aluno is None:
+                return
         cpf_aluno = self.__tela_aluno.seleciona_aluno()
         aluno = self.buscar_aluno_por_cpf(cpf_aluno)
         try:
@@ -87,7 +94,7 @@ class ControladorAluno():
                     aluno.email = dados_aluno['email']
                 if 'endereco' in dados_aluno and dados_aluno['endereco']:
                     aluno.endereco = dados_aluno['endereco']
-                self.__alunos_dao.update(aluno)  # atualiza o aluno no DAO
+                self.__alunos_dao.update(aluno)
                 self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
         except (NumeroInvalido, EmailInvalido) as e:
             self.__tela_aluno.mostra_mensagem(str(e))
