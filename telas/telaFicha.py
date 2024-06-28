@@ -84,8 +84,6 @@ class TelaFicha(TelaAbstrata):
         button, values = self.open()
         self.close()
 
-        #verificacao da descricao
-
         if button == 'Confirmar':
             descricao = values['descricao']
             numero_treinos = values['numero_treinos']
@@ -99,7 +97,6 @@ class TelaFicha(TelaAbstrata):
             return None
 
     def verifica_se_string(self, entrada):
-        #corrigir metodo
         entrada = entrada.replace(' ', '')
         if entrada.isalpha():
             return True
@@ -149,14 +146,14 @@ class TelaFicha(TelaAbstrata):
         [sg.Text(f"Número de trienos: {dados_ficha['numero_treinos']}")],
         [sg.Text("Treinos:")],
         [[sg.Text(f" -> {treino}")] for treino in dados_ficha['treinos']],
-        [sg.Cancel('Cancelar', button_color=('white', 'red'))]
+        [sg.Cancel('Próxima', button_color=('white', 'red'))]
         ]
 
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
 
         while True:
             event, values = self.__window.read()
-            if event in (sg.WIN_CLOSED, 'Cancelar'):
+            if event in (sg.WIN_CLOSED, 'Próxima'):
                 break
 
         self.__window.close()
@@ -179,13 +176,13 @@ class TelaFicha(TelaAbstrata):
             if button == 'Confirmar':
                 id_ficha = values['id_ficha']
 
-            try:
-                id_ficha = int(id_ficha)
-                return id_ficha
+                try:
+                    id_ficha = int(id_ficha)
+                    return id_ficha
                     
                 
-            except ValueError:
-                self.mostra_mensagem('Tente novamente. ID inválido.')
+                except ValueError:
+                    self.mostra_mensagem('Tente novamente. ID inválido.')
             
     def mostra_ficha_unica(self, dados_ficha):
         sg.ChangeLookAndFeel('DarkPurple1')
@@ -207,3 +204,4 @@ class TelaFicha(TelaAbstrata):
                 break
 
         self.__window.close()
+
