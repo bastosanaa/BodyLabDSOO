@@ -44,7 +44,7 @@ class ControladorAluno():
             self.__alunos_dao.add(aluno)
             self.__tela_aluno.mostra_mensagem("Aluno cadastrado com sucesso")
             return aluno
-        except (NomeNaoEhAlfa, NumeroInvalido, EmailInvalido, AlunoDuplicado, CepNaoEhNumero)  as e:
+        except (NomeNaoEhAlfa, NumeroInvalido, EmailInvalido, AlunoDuplicado, CepNaoEhNumero) as e:
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def aluno_esta_cadastrado(self, nome_aluno):
@@ -69,11 +69,6 @@ class ControladorAluno():
        return self.__alunos_dao.get(cpf_aluno)
 
     def alterar_aluno(self):
-        cpf = self.__tela_aluno.seleciona_aluno()
-        if cpf is not None:
-            dados_aluno = self.__tela_aluno.pega_dados_alterar_aluno()
-            if dados_aluno is None:
-                return
         cpf_aluno = self.__tela_aluno.seleciona_aluno()
         aluno = self.buscar_aluno_por_cpf(cpf_aluno)
         try:

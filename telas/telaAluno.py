@@ -171,10 +171,15 @@ class TelaAluno(TelaAbstrata):
              sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
-        button, values = self.open()
-        cpf = values['cpf']
-        self.close()
-        return cpf
+
+        while True:
+            button, values = self.open()
+            if values is None or button in (None, "Cancelar"):
+                return
+            cpf = values['cpf']
+            if cpf and button == 'Confirmar':
+                self.close()
+                return cpf
 
     def open(self):
         button, values = self.__window.Read()
