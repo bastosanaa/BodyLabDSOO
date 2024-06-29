@@ -4,6 +4,7 @@ from Exception.NumeroTelefoneInvalidoException import NumeroInvalido
 from Exception.NomeNaoEhAlfa import NomeNaoEhAlfa
 from Exception.EmailInvalido import EmailInvalido
 from Exception.CepNaoEhNumero import CepNaoEhNumero
+from Exception.OpcaoInvalida import OpcaoInvalida
 from telas.telaAluno import TelaAluno
 from modelos.aluno import Aluno
 from modelos.endereco import Endereco
@@ -96,7 +97,7 @@ class ControladorAluno():
                     aluno.endereco = dados_aluno['endereco']
                 self.__alunos_dao.update(aluno)
                 self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
-        except (NumeroInvalido, EmailInvalido) as e:
+        except (NumeroInvalido, EmailInvalido, OpcaoInvalida) as e:
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def listar_alunos(self):

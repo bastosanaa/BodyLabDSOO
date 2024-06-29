@@ -199,7 +199,7 @@ class ControladorMatricula:
 
     def abre_tela(self):
         lista_opcoes = {1: self.realizar_matricula, 2: self.cancelar_matricula, 3: self.lista_matriculas,
-                        4: self.vizualizar_matricula_especifica,
+                        4: self.visualizar_matricula_especifica,
                         5: lambda: self.alterar_plano(self.__tela_matricula.seleciona_id_matricula()),
                         6: lambda: self.alterar_turno(self.__tela_matricula.seleciona_id_matricula()),
                         7: self.plano_mais_procurado, 8: self.turno_mais_procurado, 0: self.retornar}
