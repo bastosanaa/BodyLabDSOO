@@ -120,6 +120,7 @@ class TelaProfessor(TelaAbstrata):
 
         if button == 'Confirmar':
             cpf = values['cpf']
+            cpf = ''.join(filter(str.isdigit, cpf))
 
             try:
                 self.verifica_cpf(cpf)
@@ -136,8 +137,7 @@ class TelaProfessor(TelaAbstrata):
     def pega_alteracoes_professor(self, dados_professor):
         sg.ChangeLookAndFeel('DarkPurple1')
 
-        turnos = [turno.value for turno in Turno]
-        print(turnos)
+        turnos = ["matutino", "vespertino", "noturno"]
 
         layout = [
         [sg.Text('Alterar Professor', font=('Helvetica', 25, 'bold'), justification='center')],
@@ -209,7 +209,7 @@ class TelaProfessor(TelaAbstrata):
     def pega_dados_novo_professor(self):
         sg.ChangeLookAndFeel('DarkPurple1')
 
-        turnos = [turno.value for turno in Turno]
+        turnos = ["matutino", "vespertino", "noturno"]
 
         layout = [
             [sg.Text("Cadastrar Professor", font=('Helvetica', 25, 'bold'), justification='center')],
@@ -294,6 +294,7 @@ class TelaProfessor(TelaAbstrata):
 
         if button == 'Confirmar':
             cpf = values['cpf']
+            cpf = ''.join(filter(str.isdigit, cpf))
 
             return cpf
                 

@@ -2,6 +2,7 @@ from telas.telaProfessor import TelaProfessor
 from Exception.ProfessorDuplicado import ProfessorDuplicado
 from modelos.professor import Professor
 from DAOs.professor_dao import ProfessorDAO
+from modelos.turno import Turno
 
 class ControladorProfessor():
     def __init__(self, controlador_sistema):
@@ -29,12 +30,11 @@ class ControladorProfessor():
     def cadastar_professor(self):
         try:
             dados_professor = self.__tela_professor.pega_dados_novo_professor()
-            print(dados_professor)
             nome = dados_professor['nome']
             cpf = dados_professor['cpf']
             numero_telefone = dados_professor['numero_telefone']
             email = dados_professor['email']
-            turno = dados_professor['turno']
+            turno = self.converte_string_em_Turno(dados_professor['turno'])
             salario = dados_professor['salario']
 
             try:
@@ -56,12 +56,13 @@ class ControladorProfessor():
             return
         dados_professores = []
         for professor in professores:
+            turno_convertido = self.converte_Turno_em_string(professor.turno)
             dados_professor = {
                 'nome': professor.nome,
                 'cpf': professor.cpf,
                 'numero_telefone' : professor.numero_telefone,
                 'email': professor.email,
-                'turno': professor.turno,
+                'turno': turno_convertido,
                 'salario': professor.salario
             }
             dados_professores.append(dados_professor)
@@ -69,19 +70,19 @@ class ControladorProfessor():
         
 
     def selecionar_professor_a_alterar(self):
-        #perguntar qual professor 
         if self.__professores_dao.get_all():
             try:
                 cpf = self.__tela_professor.pega_dados_alterar_professor()
 
                 for professor in self.__professores_dao.get_all():
                     if professor.cpf == cpf:
+                        turno_convertido = self.converte_Turno_em_string(professor.turno)
                         dados_professor = {
                         'nome': professor.nome,
                         'cpf': professor.cpf,
                         'numero_telefone' : professor.numero_telefone,
                         'email': professor.email,
-                        'turno': professor.turno,
+                        'turno': turno_convertido,
                         'salario': professor.salario
                         }
                         self.alterar_professor_selecionado(professor,dados_professor)
@@ -99,7 +100,7 @@ class ControladorProfessor():
         professor.nome = novos_dados_professor["nome"]
         professor.numero_telefone = novos_dados_professor["numero_telefone"]
         professor.email = novos_dados_professor["email"]
-        professor.turno = novos_dados_professor["turno"]
+        professor.turno = self.converte_string_em_Turno(novos_dados_professor["turno"])
         professor.salario = int(novos_dados_professor["salario"])
         self.__professores_dao.update(professor)
         self.__tela_professor.mostra_mensagem("Professor alterado com sucesso!!")
@@ -129,6 +130,33 @@ class ControladorProfessor():
         professores = self.__professores_dao.get_all()
         if professores:
             for professor in professores:
-                professores_por_turno[professor.turno] += 1
+                turno_convertido = self.converte_Turno_em_string(professor.turno)
+                professores_por_turno[turno_convertido] += 1
             
         self.__tela_professor.mostrar_relatorio_prof_turno(professores_por_turno)
+
+    def converte_string_em_Turno(self, string_turno):
+
+        string_para_capitalizada = {
+            "matutino": "Matutino",
+            "vespertino" : "Vespertino",
+            "noturno": "Noturno"
+        }
+
+        string_capitalizada = string_para_capitalizada[string_turno]
+        turno  = Turno[string_capitalizada]
+        return turno
+    
+    def converte_Turno_em_string(self, turno):
+        
+        turno_para_string = {
+            Turno.Matutino: "matutino",
+            Turno.Vespertino: "vespertino",
+            Turno.Noturno: "noturno"
+        }
+
+        string_turno = turno_para_string[turno]
+        return string_turno
+        
+
+
