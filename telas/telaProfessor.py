@@ -108,8 +108,6 @@ class TelaProfessor(TelaAbstrata):
 
         layout = [
         [sg.Text("insira os dados do professor a ser removido", font=('Helvetica', 25, 'bold'), justification='center')],
-        [sg.Text('Nome: ', )],
-        [sg.InputText('', key='nome')],
         [sg.Text('CPF: ', )],
         [sg.InputText('', key='cpf')],
         [sg.Button('Confirmar', button_color=('white', 'green')), sg.Button('Cancelar', button_color=('white', 'red'))]
@@ -121,13 +119,19 @@ class TelaProfessor(TelaAbstrata):
         self.close()
 
         if button == 'Confirmar':
-            nome = values['nome']
             cpf = values['cpf']
 
-            return {
-                    "nome": nome,
-                    "cpf": cpf
-                }
+            try:
+                self.verifica_cpf(cpf)
+            except CPFinvalido:
+                self.mostra_mensagem("Tente Novamente. CPF inválido.")
+            except ValueError:
+                self.mostra_mensagem("Tente Novamente. Preencha todos os campos")
+                return
+
+
+            return  cpf
+                
 
     def pega_alteracoes_professor(self, dados_professor):
         sg.ChangeLookAndFeel('DarkPurple1')
@@ -144,8 +148,8 @@ class TelaProfessor(TelaAbstrata):
         [sg.Text(f"Turno: {dados_professor['turno']}")],
         [sg.Text(f"Salário: {dados_professor['salario']}")],
         [sg.Text('Alterações:', font=('Helvetica', 15, 'bold'), justification='center')],
-        # [sg.Text('Nome: ', )]
-        # [sg.InputText('', key='nome')],
+        [sg.Text('Nome: ', )],
+        [sg.InputText('', key='nome')],
         [sg.Text('Número de Telefone: (apenas números)')],
         [sg.InputText('', key='numero_telefone')],
         [sg.Text('E-mail: ')],
@@ -160,6 +164,7 @@ class TelaProfessor(TelaAbstrata):
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
 
         button, values = self.open()
+        self.close()
 
         if button == 'Confirmar':
             nome = values['nome']
@@ -167,6 +172,29 @@ class TelaProfessor(TelaAbstrata):
             email = values['email']
             turno = values['turno']
             salario = values['salario']
+            print(salario)
+
+            try:
+                self.verifica_nome(nome)
+                self.verifica_telefone(numero_telefone)
+                self.verifica_email(email)
+                self.verifica_turno(turno)
+                self.verifica_salario(salario)
+            except NomeNaoEhAlfa:
+                self.mostra_mensagem("Tente Novamente. Nome inválido")
+                return
+            except NumeroInvalido:
+                self.mostra_mensagem("Tente Novamente. Número de telefone inválido (utilize apenas números)")
+                return
+            except EmailInvalido:
+                self.mostra_mensagem("Tente Novamente. Email inválido")
+                return
+            except SalarioInvalido:
+                self.mostra_mensagem("Tente Novamente. Salário inválido (dê um salário digno ao seu funcionário!)")
+                return
+            except ValueError:
+                self.mostra_mensagem("Tente Novamente. Preencha todos os campos")
+                return
 
             return {
                 "nome": nome,
@@ -217,11 +245,11 @@ class TelaProfessor(TelaAbstrata):
             # Realizando as verificações
             try:
                 self.verifica_nome(nome)
+                self.verifica_cpf(cpf)
                 self.verifica_telefone(numero_telefone)
                 self.verifica_email(email)
                 self.verifica_turno(turno)
                 self.verifica_salario(salario)
-                self.verifica_cpf(cpf)
             except NomeNaoEhAlfa:
                 self.mostra_mensagem("Tente Novamente. Nome inválido")
                 return
@@ -235,8 +263,7 @@ class TelaProfessor(TelaAbstrata):
                 self.mostra_mensagem("Tente Novamente. Salário inválido (dê um salário digno ao seu funcionário!)")
                 return
             except CPFinvalido:
-                self.mostra_mensagem("Tente Novamente. CPF inválido")
-                return
+                self.mostra_mensagem("Tente Novamente. CPF inválido.")
             except ValueError:
                 self.mostra_mensagem("Tente Novamente. Preencha todos os campos")
                 return

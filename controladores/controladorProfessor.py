@@ -70,14 +70,12 @@ class ControladorProfessor():
 
     def selecionar_professor_a_alterar(self):
         #perguntar qual professor 
-        if self.__professores_dao:
+        if self.__professores_dao.get_all():
             try:
-                dados_professor = self.__tela_professor.pega_dados_alterar_professor()
-                nome = dados_professor['nome']
-                cpf = dados_professor['cpf']
+                cpf = self.__tela_professor.pega_dados_alterar_professor()
 
                 for professor in self.__professores_dao.get_all():
-                    if professor.nome == nome and professor.cpf == cpf:
+                    if professor.cpf == cpf:
                         dados_professor = {
                         'nome': professor.nome,
                         'cpf': professor.cpf,
@@ -91,16 +89,21 @@ class ControladorProfessor():
             except TypeError as e:
                 print(e)
                 self.__tela_professor.mostra_mensagem("Operação Cancelada.")
-        self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
+                return
+        else:
+            self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistemaaaaaaaaaa")
 
     def alterar_professor_selecionado(self, professor, dados_professor):
         #TERMINAR ESSA FUNCAO
-        alteracoes = self.__tela_professor.pega_alteracoes_professor(dados_professor)
-        print(professor)
-        for key, value in alteracoes.items():
-            if value:
-                professor[key] = value
-        print(professor)
+        novos_dados_professor = self.__tela_professor.pega_alteracoes_professor(dados_professor)
+        professor.nome = novos_dados_professor["nome"]
+        professor.numero_telefone = novos_dados_professor["numero_telefone"]
+        professor.email = novos_dados_professor["email"]
+        professor.turno = novos_dados_professor["turno"]
+        professor.salario = int(novos_dados_professor["salario"])
+        self.__professores_dao.update(professor)
+        self.__tela_professor.mostra_mensagem("Professor alterado com sucesso!!")
+
 
     def remover_professor(self):
         if self.__professores_dao:
