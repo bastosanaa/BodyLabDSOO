@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="finalização do trabalho. entidades funcionando perfeitamente">
-      <change afterPath="$PROJECT_DIR$/Exception/CampoVazio.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Exception/OpcaoInvalida.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alunos.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/alunos.pkl" afterDir="false" />
+    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="fix">
       <change beforePath="$PROJECT_DIR$/controladores/controladorAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorAluno.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controladores/controladorMatricula.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorMatricula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/telas/telaAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/telas/telaAluno.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -143,7 +138,9 @@
       <workItem from="1719242127068" duration="813000" />
       <workItem from="1719251579829" duration="2345000" />
       <workItem from="1719255151136" duration="5607000" />
-      <workItem from="1719490476024" duration="2699000" />
+      <workItem from="1719490476024" duration="3484000" />
+      <workItem from="1719670186949" duration="55000" />
+      <workItem from="1719670254509" duration="1408000" />
     </task>
     <task id="LOCAL-00001" summary="Sistema de aluno e matricula ok, esperandoa  criacao do DAO">
       <option name="closed" value="true" />
@@ -225,7 +222,23 @@
       <option name="project" value="LOCAL" />
       <updated>1719253989693</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="tratamento na tela">
+      <option name="closed" value="true" />
+      <created>1719502739596</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1719502739596</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix">
+      <option name="closed" value="true" />
+      <created>1719671401387</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1719671401387</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,9 +263,11 @@
     <MESSAGE value="mudanças" />
     <MESSAGE value="melhorias" />
     <MESSAGE value="finalização do trabalho. entidades funcionando perfeitamente" />
-    <option name="LAST_COMMIT_MESSAGE" value="finalização do trabalho. entidades funcionando perfeitamente" />
+    <MESSAGE value="tratamento na tela" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BodyLabDSOO$main.coverage" NAME="main Coverage Results" MODIFIED="1719502558214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BodyLabDSOO$main.coverage" NAME="main Coverage Results" MODIFIED="1719671674439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -4,6 +4,7 @@ from Exception.NumeroTelefoneInvalidoException import NumeroInvalido
 from Exception.NomeNaoEhAlfa import NomeNaoEhAlfa
 from Exception.EmailInvalido import EmailInvalido
 from Exception.CepNaoEhNumero import CepNaoEhNumero
+from Exception.OpcaoInvalida import OpcaoInvalida
 from telas.telaAluno import TelaAluno
 from modelos.aluno import Aluno
 from modelos.endereco import Endereco
@@ -43,7 +44,7 @@ class ControladorAluno():
             self.__alunos_dao.add(aluno)
             self.__tela_aluno.mostra_mensagem("Aluno cadastrado com sucesso")
             return aluno
-        except (NomeNaoEhAlfa, NumeroInvalido, EmailInvalido, AlunoDuplicado, CepNaoEhNumero)  as e:
+        except (NomeNaoEhAlfa, NumeroInvalido, EmailInvalido, AlunoDuplicado, CepNaoEhNumero) as e:
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def aluno_esta_cadastrado(self, nome_aluno):
@@ -68,11 +69,6 @@ class ControladorAluno():
        return self.__alunos_dao.get(cpf_aluno)
 
     def alterar_aluno(self):
-        cpf = self.__tela_aluno.seleciona_aluno()
-        if cpf is not None:
-            dados_aluno = self.__tela_aluno.pega_dados_alterar_aluno()
-            if dados_aluno is None:
-                return
         cpf_aluno = self.__tela_aluno.seleciona_aluno()
         aluno = self.buscar_aluno_por_cpf(cpf_aluno)
         try:
@@ -96,7 +92,7 @@ class ControladorAluno():
                     aluno.endereco = dados_aluno['endereco']
                 self.__alunos_dao.update(aluno)
                 self.__tela_aluno.mostra_mensagem("Aluno alterado com sucesso")
-        except (NumeroInvalido, EmailInvalido) as e:
+        except (NumeroInvalido, EmailInvalido, OpcaoInvalida) as e:
             self.__tela_aluno.mostra_mensagem(str(e))
 
     def listar_alunos(self):
