@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="fix">
-      <change beforePath="$PROJECT_DIR$/controladores/controladorAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorAluno.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telas/telaAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/telas/telaAluno.py" afterDir="false" />
-    </list>
+    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="fix" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -140,7 +137,7 @@
       <workItem from="1719255151136" duration="5607000" />
       <workItem from="1719490476024" duration="3484000" />
       <workItem from="1719670186949" duration="55000" />
-      <workItem from="1719670254509" duration="1408000" />
+      <workItem from="1719670254509" duration="2060000" />
     </task>
     <task id="LOCAL-00001" summary="Sistema de aluno e matricula ok, esperandoa  criacao do DAO">
       <option name="closed" value="true" />
@@ -238,7 +235,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719671401387</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="fix">
+      <option name="closed" value="true" />
+      <created>1719671722990</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1719671722990</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
