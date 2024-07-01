@@ -95,7 +95,6 @@ class ControladorProfessor():
             self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistemaaaaaaaaaa")
 
     def alterar_professor_selecionado(self, professor, dados_professor):
-        #TERMINAR ESSA FUNCAO
         novos_dados_professor = self.__tela_professor.pega_alteracoes_professor(dados_professor)
         professor.nome = novos_dados_professor["nome"]
         professor.numero_telefone = novos_dados_professor["numero_telefone"]
@@ -107,9 +106,11 @@ class ControladorProfessor():
 
 
     def remover_professor(self):
-        if self.__professores_dao:
+        if self.__professores_dao.get_all():
             try:
                 cpf = self.__tela_professor.pega_dados_remover_professor()
+                if not cpf:
+                    raise TypeError
                 professor = self.__professores_dao.get(cpf)
                 if not professor:
                     self.__tela_professor.mostra_mensagem("Tente novamente. Professor não encontrado no sistema.")
@@ -119,7 +120,9 @@ class ControladorProfessor():
                 return
             except TypeError:
                 self.__tela_professor.mostra_mensagem("Operação Cancelada.")
-        self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
+                return
+        else:
+            self.__tela_professor.mostra_mensagem("Nenhum professor cadastrado no sistema")
 
     def relatorio_professores_turno(self):
         professores_por_turno = {

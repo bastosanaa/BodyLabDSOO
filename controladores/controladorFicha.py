@@ -59,12 +59,13 @@ class ControladorFicha:
             return titulo_treino
 
     def remover_ficha(self):
-        #pegar id na tela
         try:
             if not self.__fichas_dao:
                 self.__tela_ficha.mostra_mensagem("Nenhuma ficha cadastrada no sistema")
                 return
             id = self.__tela_ficha.pega_id_ficha()
+            if not id:
+                raise ValueError
             for ficha in self.__fichas_dao.get_all():
                 if ficha.id_ficha == id:
                     self.__fichas_dao.remove(id)
@@ -96,21 +97,28 @@ class ControladorFicha:
 
 
     def mostrar_lista_pelo_id(self):
-        if not self.__fichas_dao:
-            self.__tela_ficha.mostra_mensagem("Nenhuma ficha cadastrada no sistema")
-            return
-        id = self.__tela_ficha.pega_id_ficha()
-        for ficha in self.__fichas_dao.get_all():
-            if ficha.id_ficha == id:
-                dados_ficha = {
-                'id_ficha' : ficha.id_ficha,
-                'descricao': ficha.descricao,
-                'numero_treinos': ficha.numero_treinos,
-                'treinos': ficha.treinos
-            }
-                self.__tela_ficha.mostra_ficha_unica(dados_ficha)
+        try:
+            if not self.__fichas_dao:
+                self.__tela_ficha.mostra_mensagem("Nenhuma ficha cadastrada no sistema")
                 return
-        self.__tela_ficha.mostra_mensagem("Nenhuma ficha com esse ID encontrada")
+            id = self.__tela_ficha.pega_id_ficha()
+            if not id:
+                raise ValueError
+            for ficha in self.__fichas_dao.get_all():
+                if ficha.id_ficha == id:
+                    dados_ficha = {
+                    'id_ficha' : ficha.id_ficha,
+                    'descricao': ficha.descricao,
+                    'numero_treinos': ficha.numero_treinos,
+                    'treinos': ficha.treinos
+                }
+                    self.__tela_ficha.mostra_ficha_unica(dados_ficha)
+                    return
+            self.__tela_ficha.mostra_mensagem("Nenhuma ficha com esse ID encontrada")
+        except ValueError:
+            self.__tela_ficha.mostra_mensagem('Operação cancelada.')
+        except TypeError:
+            self.__tela_ficha.mostra_mensagem("Operação Cancelada.")
 
 
         
