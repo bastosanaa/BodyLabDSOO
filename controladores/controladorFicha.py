@@ -95,7 +95,10 @@ class ControladorFicha:
             }
             self.__tela_ficha.mostra_ficha_listagem(dados_ficha, contagem_fichas, numero_fichas)
 
-
+    def pegar_ficha_por_id(self, id_ficha):
+        for ficha in self.__fichas_dao.get_all():
+            if ficha.id_ficha == id_ficha:
+                return ficha
     def mostrar_lista_pelo_id(self):
         try:
             if not self.__fichas_dao:
@@ -119,6 +122,7 @@ class ControladorFicha:
             self.__tela_ficha.mostra_mensagem('Operação cancelada.')
         except TypeError:
             self.__tela_ficha.mostra_mensagem("Operação Cancelada.")
+
 
 
         

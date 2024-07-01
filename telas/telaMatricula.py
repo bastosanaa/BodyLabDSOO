@@ -29,6 +29,8 @@ class TelaMatricula(TelaAbstrata):
             opcao = 7
         if values['8']:
             opcao = 8
+        if values['9']:
+            opcao = 9
         if values['0'] or button in (None, "Cancelar"):
             opcao = 0
         self.close()
@@ -41,11 +43,13 @@ class TelaMatricula(TelaAbstrata):
             [sg.Radio('Realizar Matrícula', "RD1", key='1')],
             [sg.Radio('Cancelar Matrícula', "RD1", key='2')],
             [sg.Radio('Listar Matrículas', "RD1", key='3')],
+            [sg.Radio('Listar Fichas', "RD1", key='9')],
             [sg.Radio('Vizualizar Matricula Específica', "RD1", key='4')],
             [sg.Radio('Alterar Plano', "RD1", key='5')],
             [sg.Radio('Alterar Turno', "RD1", key='6')],
             [sg.Radio('Plano mais procurado', "RD1", key='7')],
             [sg.Radio('Turno mais procurado', "RD1", key='8')],
+
             [sg.Radio('Retornar', "RD1", key='0')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
@@ -57,6 +61,7 @@ class TelaMatricula(TelaAbstrata):
             [sg.Text("Realizar Matricula", font=('Helvetica', 25, 'bold'))],
             [sg.Text('Insira o nome do aluno: ', font=('Helvetica', 12)), sg.InputText('', key='aluno')],
             [sg.Text('Selecione o turno:', font=('Helvetica', 12)), sg.Combo(self.__turnos, key='turno'), sg.Text('Selecione o plano:', font=('Helvetica', 12)), sg.Combo(self.__planos, key='plano')],
+            [sg.Text('Insira o ID da ficha: ', font=('Helvetica', 12)), sg.InputText('', key='ficha')],
             [sg.Button('Confirmar', button_color=('white', 'green')), sg.Cancel('Cancelar', button_color=('white', 'red'))]
         ]
         self.__window = sg.Window('Sistema BodyLab').Layout(layout)
@@ -65,10 +70,11 @@ class TelaMatricula(TelaAbstrata):
         aluno = values['aluno']
         turno = values['turno']
         plano = values['plano']
+        ficha = values['ficha']
 
         self.close()
         self.init_opcoes()
-        return {"aluno": aluno, "turno": turno, "plano": plano}
+        return {"aluno": aluno, "turno": turno, "plano": plano, "ficha": ficha}
 
     def seleciona_id_matricula(self):
         layout = [
@@ -85,8 +91,7 @@ class TelaMatricula(TelaAbstrata):
         self.close()
         return id_matricula
 
-
-    def lista_de_matricula(self, dados_matriculas):
+    def lista_matriculas(self, dados_matriculas):
         lista_matriculas = [[
             id_matricula,
             dados["aluno"],
@@ -95,26 +100,39 @@ class TelaMatricula(TelaAbstrata):
             dados["mensalidade"],
             dados["data_inicio_matricula"],
             dados["data_vencimento_matricula"],
-            dados["data_termino_matricula"]
+            dados["data_termino_matricula"],
         ] for id_matricula, dados in dados_matriculas.items()]
 
         headers = ["ID", "Aluno", "Turno", "Plano", "Mensalidade", "Data de Início", "Data de Vencimento",
                    "Data de Término"]
 
         layout = [
-            [sg.Column([[sg.Text('Matriculas Cadastradas', justification='center', font=('Helvetica', 20, 'bold'))]],
-                       expand_x=True)],
+            [sg.Text('Matriculas Cadastradas', font=('Helvetica', 20, 'bold'))],
             [sg.Table(values=lista_matriculas, headings=headers, display_row_numbers=False, auto_size_columns=True,
                       num_rows=min(25, len(lista_matriculas)))],
             [sg.Button('OK', button_color=('white', 'green'))]
         ]
 
-        self.__window = sg.Window('Sistema BodyLab').Layout(layout)
+        self.__window = sg.Window('Matriculas', layout)
+        self.__window.read()
+        self.__window.close()
 
-        button, values = self.open()
-        self.close()
+    def lista_fichas(self, dados_fichas):
+        layout = []
+        for id_ficha, dados in dados_fichas.items():
+            layout.append([sg.Text(f'Aluno: {dados["aluno"]}')])
+            layout.append([sg.Text(f'ID: {id_ficha}')])
+            layout.append([sg.Text(f'Descrição: {dados["descricao"]}')])
+            layout.append([sg.Text(f'Número de Treinos: {dados["numero_treinos"]}')])
+            layout.append([sg.Text(f'Treinos: {", ".join(dados["treinos"])}')])
+            layout.append([sg.Text('_' * 40)])  # linha separadora
+        layout.append([sg.Button('OK')])
 
-    def mostra_matricula(self, dados_matricula):
+        self.__window = sg.Window('Fichas', layout)
+        self.__window.read()
+        self.__window.close()
+
+    def mostra_matriculas(self, dados_matricula):
         layout = [
             [sg.Text('DADOS DA MATRICULA', font=("Helvetica", 15, 'bold'))],
             [sg.Text("ID: ", font=("Helvetica", 10, 'bold')), sg.Text(str(dados_matricula["id_matricula"]))],
@@ -128,6 +146,15 @@ class TelaMatricula(TelaAbstrata):
              sg.Text(str(dados_matricula["data_vencimento_matricula"]))],
             [sg.Text("Data de Término: ", font=("Helvetica", 10, 'bold')),
              sg.Text(str(dados_matricula["data_termino_matricula"]))],
+            [sg.Text("Dados da Ficha: ", font=("Helvetica", 10, 'bold'))],
+            [sg.Text("ID da Ficha: ", font=("Helvetica", 10, 'bold')),
+             sg.Text(str(dados_matricula["ficha"]["id_ficha"]))],
+            [sg.Text("Descrição da Ficha: ", font=("Helvetica", 10, 'bold')),
+             sg.Text(dados_matricula["ficha"]["descricao"])],
+            [sg.Text("Número de Treinos: ", font=("Helvetica", 10, 'bold')),
+             sg.Text(str(dados_matricula["ficha"]["numero_treinos"]))],
+            [sg.Text("Treinos: ", font=("Helvetica", 10, 'bold')),
+             sg.Text(", ".join(dados_matricula["ficha"]["treinos"]))],
             [sg.Button('OK', button_color=('white', 'green'))]
         ]
 

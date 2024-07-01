@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="fix" />
+    <list default="true" id="927d2bed-4695-47b3-91b8-3e76ff465602" name="Changes" comment="alimentando o DAO">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controladores/controladorAluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorAluno.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controladores/controladorFicha.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorFicha.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controladores/controladorMatricula.py" beforeDir="false" afterPath="$PROJECT_DIR$/controladores/controladorMatricula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matriculas.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/matriculas.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelos/aluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelos/aluno.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelos/matricula.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelos/matricula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telas/telaMatricula.py" beforeDir="false" afterPath="$PROJECT_DIR$/telas/telaMatricula.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -138,6 +147,8 @@
       <workItem from="1719490476024" duration="3484000" />
       <workItem from="1719670186949" duration="55000" />
       <workItem from="1719670254509" duration="2060000" />
+      <workItem from="1719843768131" duration="10113000" />
+      <workItem from="1719859548763" duration="780000" />
     </task>
     <task id="LOCAL-00001" summary="Sistema de aluno e matricula ok, esperandoa  criacao do DAO">
       <option name="closed" value="true" />
@@ -243,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719671722990</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="alimentando o DAO">
+      <option name="closed" value="true" />
+      <created>1719844319709</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1719844319709</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,9 +289,10 @@
     <MESSAGE value="finalização do trabalho. entidades funcionando perfeitamente" />
     <MESSAGE value="tratamento na tela" />
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+    <MESSAGE value="alimentando o DAO" />
+    <option name="LAST_COMMIT_MESSAGE" value="alimentando o DAO" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BodyLabDSOO$main.coverage" NAME="main Coverage Results" MODIFIED="1719671674439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BodyLabDSOO$main.coverage" NAME="main Coverage Results" MODIFIED="1719860332857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

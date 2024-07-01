@@ -112,6 +112,8 @@ class ControladorAluno():
                 dados_alunos.append(dados_aluno)
             self.__tela_aluno.lista_de_alunos(dados_alunos)
 
+
+
     def abre_tela(self):
         lista_opcoes = {1: self.cadastrar_aluno, 2: self.remover_aluno, 3: self.listar_alunos, 4: self.alterar_aluno, 0: self.retornar}
 

@@ -1,8 +1,9 @@
 from modelos.plano import Plano
 from modelos.turno import Turno
+from modelos.ficha import Ficha
 class Matricula():
     def __init__(self, id_matricula: int, turno: Turno, plano: Plano, mensalidade: float, aluno,
-                 data_inicio_matricula, data_vencimento_matricula, data_termino_matricula) -> None:
+                 data_inicio_matricula, data_vencimento_matricula, data_termino_matricula, ficha: Ficha) -> None:
         self.__data_inicio_matricula = data_inicio_matricula
         self.__data_vevncimento_matricula = data_vencimento_matricula
         self.__data_termino_matricula =  data_termino_matricula
@@ -11,7 +12,16 @@ class Matricula():
         self.__turno = turno
         self.__mensalidade = mensalidade
         self.__aluno = aluno
+        self.__ficha = ficha
 
+    @property
+    def ficha(self):
+        return self.__ficha
+
+    @ficha.setter
+    def ficha(self, ficha):
+        if isinstance(ficha, Ficha):
+            self.__ficha = ficha
 
     @property
     def id_matricula(self):

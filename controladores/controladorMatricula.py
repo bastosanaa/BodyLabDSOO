@@ -25,9 +25,15 @@ class ControladorMatricula:
                 return True
         return False
 
+
     def realizar_matricula(self):
         dados_matricula = self.__tela_matricula.pega_dados_matricula(self.__turnos, self.__planos)
         aluno = dados_matricula['aluno']
+        id_ficha = int(dados_matricula['ficha'])
+        ficha = self.__controlador_sistema.controlador_ficha.pegar_ficha_por_id(id_ficha)
+        if ficha is None:
+            self.__tela_matricula.mostra_mensagem("Ficha não encontrada")
+            return
         try:
             if not self.__controlador_sistema.controlador_aluno.aluno_esta_cadastrado(aluno):
                 raise AlunoNaoCadastrado()
@@ -56,7 +62,7 @@ class ControladorMatricula:
                 data_vencimento_matricula = data_inicio_matricula + timedelta(days=30)
                 data_termino_matricula = data_inicio_matricula + timedelta(days=365)
                 matricula = Matricula(id_matricula, turno, plano, mensalidade, aluno, data_inicio_matricula,
-                                      data_vencimento_matricula, data_termino_matricula)
+                                      data_vencimento_matricula, data_termino_matricula, ficha)
                 self.__matriculas_dao.add(matricula)
                 self.__tela_matricula.mostra_mensagem(f"Matrícula realizada com sucesso!\nID da matrícula: {id_matricula}")
         except AlunoNaoCadastrado as e:
@@ -99,10 +105,11 @@ class ControladorMatricula:
                     'mensalidade': matricula.mensalidade,
                     'data_inicio_matricula': matricula.data_inicio_matricula,
                     'data_vencimento_matricula': matricula.data_vencimento_matricula,
-                    'data_termino_matricula': matricula.data_termino_matricula
+                    'data_termino_matricula': matricula.data_termino_matricula,
+                    'ficha': matricula.ficha
                 }
                 dados_matriculas[matricula.id_matricula] = dados_matricula
-            self.__tela_matricula.lista_de_matricula(dados_matriculas)
+            self.__tela_matricula.lista_matriculas(dados_matriculas)
 
     def visualizar_matricula_especifica(self):
         id_matricula = self.__tela_matricula.seleciona_id_matricula()
@@ -116,12 +123,34 @@ class ControladorMatricula:
                 'mensalidade': matricula.mensalidade,
                 'data_inicio_matricula': matricula.data_inicio_matricula,
                 'data_vencimento_matricula': matricula.data_vencimento_matricula,
-                'data_termino_matricula': matricula.data_termino_matricula
+                'data_termino_matricula': matricula.data_termino_matricula,
+                'ficha':{
+                    'id_ficha': matricula.ficha.id_ficha,
+                    'descricao': matricula.ficha.descricao,
+                    'numero_treinos': matricula.ficha.numero_treinos,
+                    'treinos': matricula.ficha.treinos
+                }
             }
-            self.__tela_matricula.mostra_matricula(dados_matricula)
+            self.__tela_matricula.mostra_matriculas(dados_matricula)
         else:
             self.__tela_matricula.mostra_mensagem("Matrícula não encontrada")
 
+    def lista_fichas(self):
+        matriculas = self.__matriculas_dao.get_all()
+        if not matriculas:
+            self.__tela_matricula.mostra_mensagem("Nenhuma ficha cadastrada")
+        else:
+            dados_fichas = {}
+            for matricula in matriculas:
+                ficha = matricula.ficha
+                dados_ficha = {
+                    'aluno': matricula.aluno,
+                    'descricao': ficha.descricao,
+                    'numero_treinos': ficha.numero_treinos,
+                    'treinos': ficha.treinos
+                }
+                dados_fichas[matricula.id_matricula] = dados_ficha
+            self.__tela_matricula.lista_fichas(dados_fichas)
 
     def buscar_matricula_por_id(self, id_matricula):
         return self.__matriculas_dao.get(id_matricula)
@@ -202,7 +231,8 @@ class ControladorMatricula:
                         4: self.visualizar_matricula_especifica,
                         5: lambda: self.alterar_plano(self.__tela_matricula.seleciona_id_matricula()),
                         6: lambda: self.alterar_turno(self.__tela_matricula.seleciona_id_matricula()),
-                        7: self.plano_mais_procurado, 8: self.turno_mais_procurado, 0: self.retornar}
+                        7: self.plano_mais_procurado, 8: self.turno_mais_procurado,
+                        9: self.lista_fichas, 0: self.retornar}
 
         while True:
             opcao_escolhida = self.__tela_matricula.tela_opcoes()

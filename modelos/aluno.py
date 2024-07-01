@@ -2,17 +2,19 @@ from modelos.turno import Turno
 from modelos.pessoa import Pessoa
 from modelos.matricula import Matricula
 from modelos.endereco import  Endereco
+from modelos.ficha import Ficha
 
 
 class Aluno(Pessoa):
     def __init__(self, cpf: int , nome: str, numero_telefone: int,
-                 email: str, matricula: Matricula, endereco: Endereco ):
+                 email: str, matricula: Matricula, endereco: Endereco):
         super().__init__(cpf, nome, numero_telefone, email)
         if isinstance(matricula, Matricula):
             self.__matricula = matricula
         self.__ficha = ''
         self.__endereco = endereco
         self.__cpf = cpf
+
 
     @property
     def cpf(self):
